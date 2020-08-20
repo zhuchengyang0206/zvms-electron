@@ -59,7 +59,8 @@
 		drawer: true,
 		phone: false,
 		items: [
-			{ title: '用户', to: '/', icon: 'mdi-account-circle' },
+			{ title: '主页', to: '/', icon: 'mdi-home' },
+			{ title: '用户', to: '/login', icon: 'mdi-account-circle' },
 		],
 		}),
 		methods:{

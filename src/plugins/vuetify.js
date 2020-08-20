@@ -7,9 +7,16 @@ import Vuetify from 'vuetify/lib';
 Vue.use(Vuetify)
 
 const opts = {
-  icons: {
-    iconfont: 'mdi',
-    //iconfont: 'fa'
-  }
+    icons: {
+        iconfont: 'mdi',
+        //iconfont: 'fa'
+    },
+    theme: {
+        themes: {
+            light: {
+                primary: '#F48FB1',
+            }
+        },
+    },
 }
 export default new Vuetify(opts)
