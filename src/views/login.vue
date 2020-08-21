@@ -1,5 +1,11 @@
 <template>
-    <v-card class="d-flex mb-6 align-center justify-center" outlined color="rgba(255, 255, 255, 0)">
+    <v-card
+        id="bgcard"
+        class="d-flex mb-6 align-center justify-center"
+        outlined
+        color="rgba(255, 255, 255, 0)"
+        :height="winheight"
+        >
         <v-card class="mx-auto" width="50%" max-width="500" min-width="250">
             <v-card-title
                 class="headline primary white--text"
@@ -10,15 +16,14 @@
                 <v-text-field type="password" v-model="form.password" label="密码" />
             </v-card-text>
             <v-card-actions>
-                <v-spacer />
-                <v-btn color="primary">登录</v-btn>
+                <v-btn color="primary" block>登录</v-btn>
             </v-card-actions>
         </v-card>
     </v-card>
 </template>
 
 <script>
-const { BrowserWindow } = window.require('electron').remote;
+//const { BrowserWindow } = window.require('electron').remote;
 export default {
   name: 'login',
   data: () => ({
@@ -26,9 +31,7 @@ export default {
       username: undefined,
       password: undefined
     },
-    win: {
-        height: BrowserWindow.height,
-    }
+    winheight: document.documentElement.clientHeight - 100
   }),
 }
 </script>

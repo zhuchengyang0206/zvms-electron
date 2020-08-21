@@ -1,18 +1,25 @@
-<template style="overflow-y: hidden;">
+<template style="overflow-y: hidden;" id="win">
+	<!--<v-app style="
+		background: url(https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php);
+		https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture
+		background-size: cover;
+		background-attachment: fixed;
+		overflow-y: hidden;"
+	>-->
 	<v-app style="
 		background: url(https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php);
 		background-size: cover;
 		background-attachment: fixed;
 		overflow-y: hidden;"
 	>
-	<v-system-bar window color="rgba(244, 143, 177, 0.75)" app style="-webkit-app-region: drag;" >
+	<v-system-bar window color="primary" app style="-webkit-app-region: drag;">
 		<span>ZVMS</span>
 		<v-spacer></v-spacer>
-		<v-icon @click="minwindow" color="white" style="-webkit-app-region: no-drag;">mdi-minus</v-icon>
-		<v-icon @click="maxwindow" color="white" style="-webkit-app-region: no-drag;">mdi-crop-square</v-icon>
+		<v-icon @click="minwindow" color="white" style="-webkit-app-region: no-drag;">mdi-window-minimize</v-icon>
+		<v-icon @click="maxwindow" color="white" style="-webkit-app-region: no-drag;">mdi-window-maximize</v-icon>
 		<v-icon @click="closewindow" color="white" style="-webkit-app-region: no-drag; margin-right: 0;">mdi-close</v-icon>
 	</v-system-bar>
-    <v-navigation-drawer color="rgba(244, 143, 177, 0.75)" expand-on-hover miniVariant app dark permanent style="backdrop-filter: blur(10px);">
+    <v-navigation-drawer color="primary" expand-on-hover miniVariant app dark permanent style="backdrop-filter: blur(10px);">
       <v-list nav dense class="py-0">
         <v-list-item two-line class="px-0">
           <v-list-item-avatar tile>
@@ -34,11 +41,25 @@
           </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-content>
+    <v-main>
       <v-container>
         <router-view></router-view>
       </v-container>
-    </v-content>
+    </v-main>
+    <v-footer
+		dense
+		absolute
+		class="font-weight-light"
+		padless
+		color=rgba(255,255,255,0.3)
+	>
+		<v-col
+			class="text-center"
+			cols="12"
+		>
+        ©mo_yi 2020
+		</v-col>
+    </v-footer>
   </v-app>
 </template>
 <style>
@@ -59,8 +80,8 @@
 		drawer: true,
 		phone: false,
 		items: [
-			{ title: '主页', to: '/', icon: 'mdi-home' },
-			{ title: '用户', to: '/login', icon: 'mdi-account-circle' },
+			//{ title: '主页', to: '/', icon: 'mdi-home' },
+			{ title: '登录', to: '/login', icon: 'mdi-account-circle' },
 		],
 		}),
 		methods:{

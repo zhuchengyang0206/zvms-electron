@@ -5,6 +5,7 @@ import Vuetify from 'vuetify/lib';
 
 
 Vue.use(Vuetify)
+Vuetify.config.silent = false;
 
 const opts = {
     icons: {
