@@ -17,7 +17,7 @@ export default new Router({
         // 首页
         {
             path: '/',
-            redirect: 'login',
+            //redirect: 'login',
             name: 'home',
             component: home
         },

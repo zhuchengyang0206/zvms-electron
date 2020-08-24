@@ -10,5 +10,16 @@
 <script>
 export default {
   name: 'home',
+  
+  mounted: function(){
+		this.redirectLogin()
+  },
+	methods: {
+		redirectLogin: function(){
+		if(this.$store.state.isLogined == false){
+			this.$router.push("/login");
+		}
+	}
+  }
 }
 </script>
