@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import home from '../views/home.vue'
 import login from '../views/login.vue'
+import me from '../views/me.vue'
 //import admin from '../views/admin.vue'
 //import about from '../views/about.vue'
 //import error404 from '../views/error404.vue'
@@ -26,6 +27,11 @@ export default new Router({
             name: 'login',
             component: login
         },
+        {
+            path: '/me',
+            name: 'me',
+            compoment: me
+        }
         /*    // 用户相关
             {
               path: '/my',

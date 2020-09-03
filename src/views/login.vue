@@ -41,7 +41,7 @@ export default {
     winheight: document.documentElement.clientHeight - 100
   }),
   methods: {
-    async login(){
+    login(){
       //this.$store.commit('loading', true)
       var axiospost = axios.create({
         transformRequest: [function (data){
@@ -54,13 +54,14 @@ export default {
       })
       if(this.$refs.form.validate()){   
         axiospost.post("/login.php" ,this.form)
-          .then(function(response){
-            if(response.data.type == "SUCCESS")
+          .then((response)=>{
+            if(response.data.type == "SUCCESS"){
               dialogs.toasts.success(response.data.message)
-            else
-              dialogs.toasts.error(response.data.message)
+              this.$router.push("/me")
+            }
+            else{dialogs.toasts.error(response.data.message)}
           })
-          .catch(function(error){
+          .catch((error)=>{
             dialogs.toasts.error(error)
           })
           //.finally(this.$store.commit('loading', false))
