@@ -28,7 +28,6 @@
 import dialogs from '../utils/dialogs.js'
 import {NOTEMPTY} from '../utils/validation.js'
 import axios from 'axios'
-import qs from 'querystring'
 
 export default {
   name: 'login',
@@ -42,31 +41,23 @@ export default {
   }),
   methods: {
     login(){
-      //this.$store.commit('loading', true)
-      var axiospost = axios.create({
-        transformRequest: [function (data){
-          data = qs.stringify(data);
-          return data;
-        }],
-        headers:{
-          'Content-Type':'application/x-www-form-urlencoded'
-        }
-      })
+      this.$store.commit('loading', true)
       if(this.$refs.form.validate()){   
-        axiospost.post("/login.php" ,this.form)
+        axios.post("/login.php" ,this.form)
           .then((response)=>{
             if(response.data.type == "SUCCESS"){
               dialogs.toasts.success(response.data.message)
-              this.$router.push("/me")
+              this.$router.push("/me");
             }
             else{dialogs.toasts.error(response.data.message)}
           })
           .catch((error)=>{
             dialogs.toasts.error(error)
           })
-          //.finally(this.$store.commit('loading', false))
+          .finally(()=>{
+            this.$store.commit('loading', false)
+          })
       }
-      //this.$store.commit('loading', false)
     }
   }
 }

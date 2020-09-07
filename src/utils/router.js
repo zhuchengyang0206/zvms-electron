@@ -30,7 +30,7 @@ export default new Router({
         {
             path: '/me',
             name: 'me',
-            compoment: me
+            component: me
         }
         /*    // 用户相关
             {
