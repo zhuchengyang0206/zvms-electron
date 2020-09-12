@@ -1,65 +1,85 @@
 <template>
-    <v-card
-        id="bgcard"
-        class="d-flex mb-6 align-center justify-center"
-        outlined
-        color="rgba(255, 255, 255, 0)"
-        :height="winheight"
-        >
-        <v-card class="mx-auto" width="50%" max-width="500" min-width="250">
-            <v-card-title
-                class="headline primary white--text"
-                style="backdrop-filter: blur(2px);"
-            >登录</v-card-title><br>
-            <v-card-text>
-              <v-form ref="form">
-                <v-text-field type="username" v-model="form.userid" :rules="rules" label="用户ID" />
-                <v-text-field type="password" v-model="form.password" :rules="rules" label="密码" @keyup.native.enter="login" />
-              </v-form>
-            </v-card-text>
-            <v-card-actions>
-                <v-btn color="primary" block :disabled="$store.state.isLoading" @click="login">登录</v-btn>
-            </v-card-actions>
-        </v-card>
+  <v-card
+    id="bgcard"
+    class="d-flex mb-6 align-center justify-center"
+    outlined
+    color="rgba(255, 255, 255, 0)"
+    :height="winheight"
+  >
+    <v-card class="mx-auto" width="50%" max-width="500" min-width="250">
+      <v-card-title class="headline primary white--text" style="backdrop-filter: blur(2px);">登录</v-card-title>
+      <br />
+      <v-card-text>
+        <v-form ref="form">
+          <v-text-field type="username" v-model="form.userid" :rules="rules" label="用户ID" />
+          <v-text-field
+            type="password"
+            v-model="form.password"
+            :rules="rules"
+            label="密码"
+            @keyup.native.enter="login"
+          />
+        </v-form>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="primary" block :disabled="$store.state.isLoading" @click="login">登录</v-btn>
+      </v-card-actions>
     </v-card>
+  </v-card>
 </template>
 
 <script>
-import dialogs from '../utils/dialogs.js'
-import {NOTEMPTY} from '../utils/validation.js'
-import axios from 'axios'
+import dialogs from "../utils/dialogs.js"; //弹出toast提示用
+import { NOTEMPTY } from "../utils/validation.js"; //校验表单完整性
+import axios from "axios"; //ajax网络库
 
 export default {
-  name: 'login',
+  name: "login",
   data: () => ({
+    //储存表单数据
     form: {
       userid: undefined,
-      password: undefined
+      password: undefined,
     },
-    rules: [NOTEMPTY()],
-    winheight: document.documentElement.clientHeight - 100
+    rules: [NOTEMPTY()], //表单校验规则
+    winheight: document.documentElement.clientHeight - 100, //一个比较失败的自动调整大小
   }),
   methods: {
-    login(){
-      this.$store.commit('loading', true)
-      if(this.$refs.form.validate()){   
-        axios.post("/login.php" ,this.form)
-          .then((response)=>{
-            if(response.data.type == "SUCCESS"){
-              dialogs.toasts.success(response.data.message)
+    login() {
+      this.$store.commit("loading", true);
+      
+      if (this.$refs.form.validate()) {
+        axios
+          .post("/login.php", this.form)
+          .then((response) => {
+            //对传回数据进行处理
+            console.log(response.data);
+            if (response.data.type == "SUCCESS") {
+              dialogs.toasts.success(response.data.message);
+              //将一切保存到$store
+              this.$store.commit("login", true);
+              this.$store.commit("info", {
+                username: response.data.username,
+                permission: response.data.permission,
+              });
               this.$router.push("/me");
-              this.$store.commit('draweritems', [{ title: '我的', to: '/me', icon: 'mdi-account-circle' }])
+              //更新抽屉导航栏
+              this.$store.commit("draweritems", [
+                { title: "我的", to: "/me", icon: "mdi-account-circle" },
+                { title: "登出", to: "/logout", icon: "mdi-exit-to-app" },
+              ]);
+            } else {
+              dialogs.toasts.error(response.data.message);
             }
-            else{dialogs.toasts.error(response.data.message)}
           })
-          .catch((error)=>{
-            dialogs.toasts.error(error)
+          .catch((error) => {
+            dialogs.toasts.error(error);
           })
-          .finally(()=>{
-            this.$store.commit('loading', false)
-          })
+          .finally(() => {});
+
+        this.$store.commit("loading", false);
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>

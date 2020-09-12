@@ -1,7 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>你好,</v-card-title>
-    <v-card-text>{{username}},{{$store.state.isLogined}},{{$store.state.info.username}},{{$store.state.info.permission}}</v-card-text>
+    <v-card-title>正在登出...</v-card-title>
   </v-card>
 </template>
 
@@ -10,24 +9,25 @@ import axios from "axios";
 import dialogs from "../utils/dialogs.js";
 
 export default {
-  name: "me",
-  data: () => ({
-    username: undefined,
-  }),
+  name: "logout",
   mounted: function () {
-    this.pageload();
+    this.logout();
   },
   methods: {
-    pageload() {
+    logout() {
       this.$store.commit("loading", true);
-      //这一段暂时用不着了，因为网络提取改到从$store里面提取了,但是先留着吧
+      this.$store.commit("login", false);
+      this.$store.commit("info", {
+        username: undefined,
+        permission: undefined,
+      });
+
       axios
-        .post("/userinfo.php")
+        .post("/logout.php")
         .then((response) => {
           console.log(response.data);
-          console.log(this.$store.state.info);
           if (response.data.type == "SUCCESS") {
-            this.username = response.data.username;
+            dialogs.toasts.success(response.data.message);
           } else if (response.data.type == "ERROR") {
             dialogs.toasts.error(response.data.message);
           }
@@ -35,9 +35,15 @@ export default {
         .catch((error) => {
           dialogs.toasts.error(error);
         })
-        .finally(() => {});
+        .finally(() => {
+          this.$store.commit("draweritems", [
+            { title: "登录", to: "/login", icon: "mdi-account-circle" },
+          ]);
+          this.$router.push("/login");
+        });
+
       this.$store.commit("loading", false);
     },
   },
 };
-</script>
+</script>>

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import home from '../views/home.vue'
 import login from '../views/login.vue'
 import me from '../views/me.vue'
+import logout from '../views/logout.vue'
 //import admin from '../views/admin.vue'
 //import about from '../views/about.vue'
 //import error404 from '../views/error404.vue'
@@ -31,6 +32,11 @@ export default new Router({
             path: '/me',
             name: 'me',
             component: me
+        },
+        {
+            path: '/logout',
+            name: 'logout',
+            component: logout
         }
         /*    // 用户相关
             {

@@ -5,16 +5,29 @@ import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+    //用于保存状态的store
     state: {
         isLogined: false,
         isLoading: false,
+        info: {
+            username: undefined,
+            permission: undefined
+        },
         draweritems: [
             { title: '登录', to: '/login', icon: 'mdi-account-circle' },
         ]
     },
+
+    //传值操作
     mutations: {
         loading: (state, payload) => {
             state.isLoading = payload
+        },
+        info: (state, payload) => {
+            state.info = payload
+        },
+        login: (state, payload) => {
+            state.isLogined = payload
         },
         draweritems: (state, payload) => {
             state.draweritems = payload
