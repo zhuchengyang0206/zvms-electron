@@ -46,6 +46,11 @@
     "env": {
       "node": true
     },
+    "build": {
+      "electronDownload": {
+        "mirror": "https://npm.taobao.org/mirrors/electron/"
+      }
+    },
     "extends": [
       "plugin:vue/essential",
       "eslint:recommended"
