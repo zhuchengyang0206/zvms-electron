@@ -18,7 +18,7 @@
               </v-form>
             </v-card-text>
             <v-card-actions>
-                <v-btn color="primary" block :loading="$store.state.isLoading" @click="login">登录</v-btn>
+                <v-btn color="primary" block :disabled="$store.state.isLoading" @click="login">登录</v-btn>
             </v-card-actions>
         </v-card>
     </v-card>
@@ -48,6 +48,7 @@ export default {
             if(response.data.type == "SUCCESS"){
               dialogs.toasts.success(response.data.message)
               this.$router.push("/me");
+              this.$store.commit('draweritems', [{ title: '我的', to: '/me', icon: 'mdi-account-circle' }])
             }
             else{dialogs.toasts.error(response.data.message)}
           })

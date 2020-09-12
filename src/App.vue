@@ -31,7 +31,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
-          <v-list-item v-for="item in items" :key="item.title" :to="item.to" link>
+          <v-list-item v-for="item in $store.state.draweritems" :key="item.title" :to="item.to" link>
             <v-list-item-icon>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
@@ -39,6 +39,9 @@
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+			<v-list-item>
+				<v-progress-circular color="white" indeterminate v-show="$store.state.isLoading"></v-progress-circular>
+			</v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-main>
@@ -79,10 +82,6 @@
 		activeBtn: 1,
 		drawer: true,
 		phone: false,
-		items: [
-			//{ title: '主页', to: '/', icon: 'mdi-home' },
-			{ title: '登录', to: '/login', icon: 'mdi-account-circle' },
-		],
 		}),
 		methods:{
 			minwindow(){
