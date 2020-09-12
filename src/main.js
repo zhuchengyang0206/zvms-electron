@@ -9,6 +9,7 @@ import qs from 'querystring'
 Vue.config.productionTip = false
 
 axios.defaults.baseURL = 'http://localhost';
+axios.defaults.withCredentials = true;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.transformRequest = [function (data){
     data = qs.stringify(data);
