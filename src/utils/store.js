@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
+//import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex);
 
@@ -11,7 +11,8 @@ export default new Vuex.Store({
         isLoading: false,
         info: {
             username: undefined,
-            permission: undefined
+            permission: undefined,
+            class: undefined
         },
         draweritems: [
             { title: '登录', to: '/login', icon: 'mdi-account-circle' },
@@ -33,5 +34,5 @@ export default new Vuex.Store({
             state.draweritems = payload
         }
     },
-    plugins: [createPersistedState()]
+    //plugins: [createPersistedState()]
 });

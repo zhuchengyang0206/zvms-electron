@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>你好,</v-card-title>
-    <v-card-text>{{username}},{{$store.state.isLogined}},{{$store.state.info.username}},{{$store.state.info.permission}}</v-card-text>
+    <v-card-text>{{$store.state.isLogined}},{{$store.state.info.username}},{{$store.state.info.permission}}</v-card-text>
   </v-card>
 </template>
 
@@ -15,7 +15,7 @@ export default {
     username: undefined,
   }),
   mounted: function () {
-    this.pageload();
+    //this.pageload();
   },
   methods: {
     pageload() {
