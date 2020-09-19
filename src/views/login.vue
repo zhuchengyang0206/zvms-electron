@@ -46,11 +46,11 @@ export default {
   }),
   methods: {
     login() {
-      this.$store.commit("loading", true);
-      
       if (this.$refs.form.validate()) {
+        this.$store.commit("loading", true);
+
         axios
-          .post("/login.php", this.form)
+          .post("/login", this.form)
           .then((response) => {
             //对传回数据进行处理
             console.log(response.data);
@@ -61,6 +61,7 @@ export default {
               this.$store.commit("info", {
                 username: response.data.username,
                 permission: response.data.permission,
+                class: response.data.class,
               });
               this.$router.push("/me");
               //更新抽屉导航栏
@@ -68,8 +69,10 @@ export default {
                 { title: "我的", to: "/me", icon: "mdi-account-circle" },
                 { title: "登出", to: "/logout", icon: "mdi-exit-to-app" },
               ]);
-            } else {
+            } else if (response.data.type == "ERROR") {
               dialogs.toasts.error(response.data.message);
+            } else {
+              dialogs.toasts.error("未知错误!");
             }
           })
           .catch((error) => {

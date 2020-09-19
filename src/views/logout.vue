@@ -21,9 +21,9 @@ export default {
         username: undefined,
         permission: undefined,
       });
-
+      //之后这里还要做点删除cookie什么的
       axios
-        .post("/logout.php")
+        .post("/logout")
         .then((response) => {
           console.log(response.data);
           if (response.data.type == "SUCCESS") {
