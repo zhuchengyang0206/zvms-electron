@@ -4,7 +4,7 @@ import home from '../views/home.vue'
 import login from '../views/login.vue'
 import me from '../views/me.vue'
 import logout from '../views/logout.vue'
-import * as classes from '../views/classes'
+import * as classes from '../views/class'
 //import admin from '../views/admin.vue'
 //import about from '../views/about.vue'
 //import error404 from '../views/error404.vue'
@@ -40,7 +40,7 @@ export default new Router({
       component: logout
     },
     {
-      path: '/classes/list',
+      path: '/class/list',
       component: classes.list
     }
     /*    // 用户相关
