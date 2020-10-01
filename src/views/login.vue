@@ -44,10 +44,10 @@
 </template>
 
 <script>
-import dialogs from "../utils/dialogs.js" //弹出toast提示用
-import { NOTEMPTY } from "../utils/validation.js" //校验表单完整性
-import axios from "axios" //ajax网络库
-import permissions from "../utils/permissions.js"
+import dialogs from "../utils/dialogs.js"; //弹出toast提示用
+import { NOTEMPTY } from "../utils/validation.js"; //校验表单完整性
+import axios from "axios"; //ajax网络库
+import permissions from "../utils/permissions.js";
 
 export default {
   name: "login",
@@ -64,56 +64,55 @@ export default {
   methods: {
     login() {
       if (this.$refs.form.validate()) {
-        this.$store.commit("loading", true)
-
+        this.$store.commit("loading", true);
         axios
           .post("/login", this.form)
           .then((response) => {
             //对传回数据进行处理
-            console.log(response.data)
+            console.log(response.data);
             if (response.data.type == "SUCCESS") {
-              dialogs.toasts.success(response.data.message)
+              dialogs.toasts.success(response.data.message);
               //将一切保存到$store
-              this.$store.commit("login", true)
+              this.$store.commit("login", true);
               this.$store.commit("info", {
                 username: response.data.username,
                 permission: response.data.permission,
                 class: response.data.class,
-              })
-              this.$router.push("/me")
+              });
+              this.$router.push("/me");
               //更新抽屉导航栏
               this.drawers = [
                 { title: "我的", to: "/me", icon: "mdi-account-circle" },
-              ]
+              ];
 
               if (response.data.permission >= permissions.teacher) {
                 this.drawers.push({
                   title: "班级列表",
                   to: "/class/list",
                   icon: "mdi-view-list",
-                })
+                });
               }
 
               this.drawers.push({
                 title: "登出",
                 to: "/logout",
                 icon: "mdi-exit-to-app",
-              })
-              this.$store.commit("draweritems", this.drawers)
+              });
+              this.$store.commit("draweritems", this.drawers);
             } else if (response.data.type == "ERROR") {
-              dialogs.toasts.error(response.data.message)
+              dialogs.toasts.error(response.data.message);
             } else {
-              dialogs.toasts.error("未知错误!")
+              dialogs.toasts.error("未知错误!");
             }
           })
           .catch((error) => {
-            dialogs.toasts.error(error)
+            dialogs.toasts.error(error);
           })
-          .finally(() => {})
-
-        this.$store.commit("loading", false)
+          .finally(() => {
+            this.$store.commit("loading", false);
+          });
       }
     },
   },
-}
+};
 </script>

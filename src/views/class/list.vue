@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import axios from "axios"
-import dialogs from "../../utils/dialogs.js"
+import axios from "axios";
+import dialogs from "../../utils/dialogs.js";
 
 export default {
   data: () => ({
@@ -41,31 +41,30 @@ export default {
     ],
   }),
   mounted: function () {
-    this.pageload()
+    this.pageload();
   },
   methods: {
     pageload() {
-      this.$store.commit("loading", true)
-
+      this.$store.commit("loading", true);
       axios
         .post("/class/list")
         .then((response) => {
-          console.log(response.data)
+          console.log(response.data);
           if (response.data.type == "ERROR")
-            dialogs.toasts.error(response.data.message)
+            dialogs.toasts.error(response.data.message);
           else if (response.data.type == "SUCCESS") {
-            this.classes = response.data.class
-          } else dialogs.toasts.error("未知错误")
+            this.classes = response.data.class;
+          } else dialogs.toasts.error("未知错误");
         })
         .catch((error) => {
-          dialogs.toasts.error(error)
+          dialogs.toasts.error(error);
         })
-        .finally(() => {})
-
-      this.$store.commit("loading", false)
+        .finally(() => {
+          this.$store.commit("loading", false);
+        });
     },
   },
-}
+};
 </script>
 
 <style>
