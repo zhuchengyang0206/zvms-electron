@@ -19,6 +19,8 @@
         :items="classes"
         :search="search"
         :dense="dense"
+        :loading="$store.state.isLoading"
+        loading-text="加载中..."
       ></v-data-table>
     </v-card-text>
   </v-card>
@@ -45,14 +47,20 @@ export default {
     pageload() {
       this.$store.commit("loading", true);
 
-      axios.post("/class/list").then((response) => {
-        console.log(response.data);
-        if (response.data.type == "ERROR")
-          dialogs.toasts.error(response.data.message);
-        else if (response.data.type == "SUCCESS") {
-          this.classes = response.data.class;
-        } else dialogs.toasts.error("未知错误");
-      });
+      axios
+        .post("/class/list")
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.type == "ERROR")
+            dialogs.toasts.error(response.data.message);
+          else if (response.data.type == "SUCCESS") {
+            this.classes = response.data.class;
+          } else dialogs.toasts.error("未知错误");
+        })
+        .catch((error) => {
+          dialogs.toasts.error(error);
+        })
+        .finally(() => {});
 
       this.$store.commit("loading", false);
     },
