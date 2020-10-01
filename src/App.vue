@@ -1,11 +1,4 @@
 <template style="overflow-y: hidden;" id="win">
-	<!--<v-app style="
-		background: url(https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php);
-		https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture
-		background-size: cover;
-		background-attachment: fixed;
-		overflow-y: hidden;"
-	>-->
 	<v-app style="
 		background: url(https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php);
 		background-size: cover;
@@ -74,7 +67,6 @@
 }
 </style>
 <script>
-	//import {remote} from "electron";
 	const { BrowserWindow } = window.require('electron').remote;
 	export default {
 		name: 'App',

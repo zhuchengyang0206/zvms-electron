@@ -1,15 +1,25 @@
 <template>
   <v-card>
-    <v-card-title>班级列表</v-card-title>
+    <v-card-title
+      ><div class="headline">班级列表</div>
+      <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
         append-icon="mdi-magnify"
         label="搜索"
         single-line
         hide-details
-      ></v-text-field>
+      ></v-text-field
+      ><v-spacer></v-spacer>
+      <v-switch v-model="dense" label="密集显示"></v-switch
+    ></v-card-title>
     <v-card-text>
-      <v-data-table :headers="headers" :items="classes" :search="search"></v-data-table>
+      <v-data-table
+        :headers="headers"
+        :items="classes"
+        :search="search"
+        :dense="dense"
+      ></v-data-table>
     </v-card-text>
   </v-card>
 </template>
@@ -22,8 +32,9 @@ export default {
   data: () => ({
     classes: undefined,
     search: "",
+    dense: false,
     headers: [
-      { text: "班级ID", value: "id", align: "start", sortable: false },
+      { text: "班级ID", value: "id", align: "start", sortable: true },
       { text: "班级名称", value: "name" },
     ],
   }),
