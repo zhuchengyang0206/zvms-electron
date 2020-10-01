@@ -72,7 +72,7 @@ function createWindow() {
     tray.setContextMenu(contextMenu)
     tray.on('click', () => {
         win.isVisible() ? win.hide() : win.show()
-        win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(True)
+        win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true)
     })
 }
 
