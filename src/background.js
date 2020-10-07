@@ -5,14 +5,16 @@ import {
     createProtocol,
     /* installVueDevtools */
 } from 'vue-cli-plugin-electron-builder/lib'
+const path = require('path')
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const electron = require('electron')
 const Menu = electron.Menu
+const Tray = electron.Tray
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
-
+let tray = null
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
 
@@ -25,6 +27,7 @@ function createWindow() {
         frame: false,
         titleBarStyle: 'hidden',
         show: false,
+        skipTaskbar: false,
         webPreferences: {
             nodeIntegration: true,
             webSecurity: false
@@ -37,14 +40,39 @@ function createWindow() {
         if (!process.env.IS_TEST) win.webContents.openDevTools()
     } else {
         createProtocol('app')
-            // Load the index.html when not in development
+        // Load the index.html when not in development
         win.loadURL('app://./index.html')
     }
     win.once('ready-to-show', () => {
         win.show()
     })
-    win.on('closed', () => {
+    win.on('closed', function (e) {
+        e.preventDefault()
         win = null
+    })
+    win.on('close', (event) => {
+        win.hide()
+        win.setSkipTaskbar(true)
+        event.preventDefault()
+    })
+    win.on('show', () => {
+        //tray.setHighlightMode('always')
+
+    })
+    win.on('hide', () => {
+        //tray.setHighlightMode('never')
+    })
+    tray = new Tray(path.join(__dirname, 'logo.png'))
+    const contextMenu = Menu.buildFromTemplate([
+        { label: 'ZVMS' },
+        { label: '显示', click: () => win.show() },
+        { label: '退出', click: () => { win.destroy() } }
+    ])
+    tray.setToolTip('ZVMS')
+    tray.setContextMenu(contextMenu)
+    tray.on('click', () => {
+        win.isVisible() ? win.hide() : win.show()
+        win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true)
     })
 }
 
@@ -68,7 +96,7 @@ app.on('activate', () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', async() => {
+app.on('ready', async () => {
     if (isDevelopment && !process.env.IS_TEST) {
         // Install Vue Devtools
         // Devtools extensions are broken in Electron 6.0.0 and greater

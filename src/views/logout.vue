@@ -40,9 +40,8 @@ export default {
             { title: "登录", to: "/login", icon: "mdi-account-circle" },
           ]);
           this.$router.push("/login");
+          this.$store.commit("loading", false);
         });
-
-      this.$store.commit("loading", false);
     },
   },
 };

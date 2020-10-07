@@ -7,11 +7,20 @@
     :height="winheight"
   >
     <v-card class="mx-auto" width="50%" max-width="500" min-width="250">
-      <v-card-title class="headline primary white--text" style="backdrop-filter: blur(2px);">登录</v-card-title>
+      <v-card-title
+        class="headline primary white--text"
+        style="backdrop-filter: blur(2px)"
+        >登录</v-card-title
+      >
       <br />
       <v-card-text>
         <v-form ref="form">
-          <v-text-field type="username" v-model="form.userid" :rules="rules" label="用户ID" />
+          <v-text-field
+            type="username"
+            v-model="form.userid"
+            :rules="rules"
+            label="用户ID"
+          />
           <v-text-field
             type="password"
             v-model="form.password"
@@ -22,7 +31,13 @@
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="primary" block :disabled="$store.state.isLoading" @click="login">登录</v-btn>
+        <v-btn
+          color="primary"
+          block
+          :disabled="$store.state.isLoading"
+          @click="login"
+          >登录</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-card>
@@ -32,6 +47,7 @@
 import dialogs from "../utils/dialogs.js"; //弹出toast提示用
 import { NOTEMPTY } from "../utils/validation.js"; //校验表单完整性
 import axios from "axios"; //ajax网络库
+import permissions from "../utils/permissions.js";
 
 export default {
   name: "login",
@@ -41,6 +57,7 @@ export default {
       userid: undefined,
       password: undefined,
     },
+    drawers: undefined,
     rules: [NOTEMPTY()], //表单校验规则
     winheight: document.documentElement.clientHeight - 100, //一个比较失败的自动调整大小
   }),
@@ -48,7 +65,6 @@ export default {
     login() {
       if (this.$refs.form.validate()) {
         this.$store.commit("loading", true);
-
         axios
           .post("/login", this.form)
           .then((response) => {
@@ -65,10 +81,24 @@ export default {
               });
               this.$router.push("/me");
               //更新抽屉导航栏
-              this.$store.commit("draweritems", [
+              this.drawers = [
                 { title: "我的", to: "/me", icon: "mdi-account-circle" },
-                { title: "登出", to: "/logout", icon: "mdi-exit-to-app" },
-              ]);
+              ];
+
+              if (response.data.permission >= permissions.teacher) {
+                this.drawers.push({
+                  title: "班级列表",
+                  to: "/class/list",
+                  icon: "mdi-view-list",
+                });
+              }
+
+              this.drawers.push({
+                title: "登出",
+                to: "/logout",
+                icon: "mdi-exit-to-app",
+              });
+              this.$store.commit("draweritems", this.drawers);
             } else if (response.data.type == "ERROR") {
               dialogs.toasts.error(response.data.message);
             } else {
@@ -78,9 +108,9 @@ export default {
           .catch((error) => {
             dialogs.toasts.error(error);
           })
-          .finally(() => {});
-
-        this.$store.commit("loading", false);
+          .finally(() => {
+            this.$store.commit("loading", false);
+          });
       }
     },
   },
