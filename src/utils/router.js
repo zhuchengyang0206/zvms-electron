@@ -42,6 +42,10 @@ export default new Router({
     {
       path: '/class/list',
       component: classes.list
+    },
+    {
+      path: '/class/stulist',
+      component: classes.stulist
     }
     /*    // 用户相关
         {

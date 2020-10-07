@@ -85,10 +85,19 @@ export default {
                 { title: "我的", to: "/me", icon: "mdi-account-circle" },
               ];
 
+              //看看是否加上班级列表
               if (response.data.permission >= permissions.teacher) {
                 this.drawers.push({
                   title: "班级列表",
                   to: "/class/list",
+                  icon: "mdi-view-list",
+                });
+              }
+              //看看是否加上学生列表
+              if (response.data.permission >= permissions.secretary) {
+                this.drawers.push({
+                  title: "学生列表",
+                  to: "/class/stulist",
                   icon: "mdi-view-list",
                 });
               }
