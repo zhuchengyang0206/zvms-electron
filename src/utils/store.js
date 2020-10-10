@@ -12,7 +12,8 @@ export default new Vuex.Store({
         info: {
             username: undefined,
             permission: undefined,
-            class: undefined
+            class: undefined,
+            classname: undefined
         },
         draweritems: [
             { title: '登录', to: '/login', icon: 'mdi-account-circle' }

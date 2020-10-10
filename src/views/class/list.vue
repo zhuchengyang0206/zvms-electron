@@ -9,10 +9,8 @@
         label="搜索"
         single-line
         hide-details
-      ></v-text-field
-      ><v-spacer></v-spacer>
-      <v-switch v-model="dense" label="密集显示"></v-switch
-    ></v-card-title>
+      ></v-text-field>
+    </v-card-title>
     <v-card-text>
       <v-data-table
         :headers="headers"
@@ -34,7 +32,6 @@ export default {
   data: () => ({
     classes: undefined,
     search: "",
-    dense: false,
     headers: [
       { text: "班级ID", value: "id", align: "start", sortable: true },
       { text: "班级名称", value: "name" },

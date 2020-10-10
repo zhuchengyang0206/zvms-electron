@@ -23,7 +23,7 @@ export default {
       });
       //之后这里还要做点删除cookie什么的
       axios
-        .post("/logout")
+        .post("/user/logout")
         .then((response) => {
           console.log(response.data);
           if (response.data.type == "SUCCESS") {

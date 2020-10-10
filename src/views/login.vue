@@ -66,7 +66,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.$store.commit("loading", true);
         axios
-          .post("/login", this.form)
+          .post("/user/login", this.form)
           .then((response) => {
             //对传回数据进行处理
             console.log(response.data);
@@ -78,6 +78,7 @@ export default {
                 username: response.data.username,
                 permission: response.data.permission,
                 class: response.data.class,
+                classname: response.data.classname,
               });
               this.$router.push("/me");
               //更新抽屉导航栏
