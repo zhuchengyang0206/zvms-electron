@@ -4,12 +4,26 @@ import router from './utils/router.js'
 import store from './utils/store.js'
 import vuetify from './plugins/vuetify'
 import axios from 'axios'
-//import qs from 'querystring'
+import dialogs from './utils/dialogs'
 
 Vue.config.productionTip = false
 
-//远程服务器地址
-axios.defaults.baseURL = 'http://localhost:5000';
+//读取远程配置
+axios
+    .get("https://zvms.gitee.io/config/zvms.json?"+Math.random())
+    .then((response) => {
+        console.log(response.data);
+        if (response.data.type == "SUCCESS") {
+            axios.defaults.baseURL = response.data.server;
+        } else if (response.data.type == "ERROR") {
+            dialogs.toasts.error(response.data.message);
+            axios.defaults.baseURL = 'http://localhost';
+        }
+    })
+    .catch((error) => {
+        dialogs.toasts.error(error);
+    })
+    .finally(() => { });
 //axios携带cookie
 axios.defaults.withCredentials = true;
 //post设定，自动序列化表单的json数据

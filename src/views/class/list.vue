@@ -16,7 +16,6 @@
         :headers="headers"
         :items="classes"
         :search="search"
-        :dense="dense"
         :loading="$store.state.isLoading"
         loading-text="加载中..."
       ></v-data-table>
