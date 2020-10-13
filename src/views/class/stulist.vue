@@ -119,12 +119,12 @@ export default {
 		var inside = item['inside'];
 		var outside = item['outside'];
 		var large = item['large'];
-		var result = "是";
+		var result = true;
 		
 		if(outside < 20){this.inside = inside - (20-outside) * 2; outside = 20;}
-		if(inside < 20 || outside < 20 || large < 16 || inside + outside + large - 60 < 4){result = "否";}
+		if(large < 16 || inside < 20 || outside < 20 || inside + outside < 44) {result=false;}
 		
-		return result;
+		return result ? "是" : "否";
     },
   },
 };
