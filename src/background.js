@@ -62,7 +62,7 @@ function createWindow() {
     win.on('hide', () => {
         //tray.setHighlightMode('never')
     })
-    tray = new Tray(path.join(__dirname, 'logo.png'))
+    tray = new Tray(path.join(__dirname, 'assests/logo.png'))
     const contextMenu = Menu.buildFromTemplate([
         { label: 'ZVMS' },
         { label: '显示', click: () => win.show() },
