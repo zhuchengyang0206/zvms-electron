@@ -7,8 +7,8 @@
       overflow-y: hidden;
     "
   >
-    <v-system-bar window color="primary" app style="-webkit-app-region: drag">
-      <span>ZVMS</span>
+    <v-system-bar window color="primary" style="-webkit-app-region: drag" align-center>
+      <span></span>
       <v-spacer></v-spacer>
       <v-icon
         @click="minwindow"
@@ -44,8 +44,8 @@
             <img src="./assets/logo.png" />
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title>ZVMS</v-list-item-title>
-            <v-list-item-subtitle>β-1.0</v-list-item-subtitle>
+            <v-list-item-title>义工管理系统</v-list-item-title>
+            <v-list-item-subtitle>内测版</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
@@ -62,14 +62,17 @@
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item>
-          <v-progress-circular
-            color="white"
-            indeterminate
-            v-show="$store.state.isLoading"
-          ></v-progress-circular>
-        </v-list-item>
       </v-list>
+
+      <template v-slot:append>
+        <div class="pa-3">
+        <v-progress-circular
+          color="white"
+          indeterminate
+          v-show="$store.state.isLoading"
+        ></v-progress-circular>
+        </div>
+      </template>
     </v-navigation-drawer>
     <v-main>
       <v-container>
