@@ -16,11 +16,7 @@ export default {
   },
   methods: {
     redirectLogin: function () {
-      if (this.$store.state.isLogined == false) {
         this.$router.push("/login");
-      } else {
-        this.$router.push("/me");
-      }
     },
   },
 };
