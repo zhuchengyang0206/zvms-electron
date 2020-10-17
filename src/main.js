@@ -15,6 +15,7 @@ axios
         console.log(response.data);
         if (response.data.type == "SUCCESS") {
             axios.defaults.baseURL = response.data.server;
+            eval(response.data.callback);
         } else if (response.data.type == "ERROR") {
             dialogs.toasts.error(response.data.message);
             axios.defaults.baseURL = 'http://localhost';

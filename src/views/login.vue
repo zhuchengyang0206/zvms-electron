@@ -98,7 +98,7 @@ export default {
               if (response.data.permission >= permissions.secretary) {
                 this.drawers.push({
                   title: "学生列表",
-                  to: "/class/stulist",
+                  to: "/class/stulist/"+response.data.class,
                   icon: "mdi-view-list",
                 });
               }

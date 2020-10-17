@@ -17,8 +17,10 @@
         :items="classes"
         :search="search"
         :loading="$store.state.isLoading"
+        @click:row="rowClick"
         loading-text="加载中..."
-      ></v-data-table>
+      >
+      </v-data-table>
     </v-card-text>
   </v-card>
 </template>
@@ -26,6 +28,7 @@
 <script>
 import axios from "axios";
 import dialogs from "../../utils/dialogs.js";
+import permissions from "../../utils/permissions";
 
 export default {
   data: () => ({
@@ -58,6 +61,12 @@ export default {
         .finally(() => {
           this.$store.commit("loading", false);
         });
+    },
+    rowClick: function (item) {
+      console.log(item);
+      if (this.$store.state.info.permission >= permissions.teacher)
+        this.$router.push("/class/stulist/" + item.id);
+      else console.log("权限不足，无法跳转");
     },
   },
 };

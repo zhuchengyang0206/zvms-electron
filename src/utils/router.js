@@ -44,7 +44,7 @@ export default new Router({
       component: classes.list
     },
     {
-      path: '/class/stulist',
+      path: '/class/stulist/:classid',
       component: classes.stulist
     }
     /*    // 用户相关
