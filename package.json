@@ -10,7 +10,7 @@
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "pack": "./node_modules/.bin/electron-packager . $npm_package_productName --app-version=$npm_package_version --out=builds --ignore='^/builds$' --version-string.CompanyName='ZVMS' --version-string.LegalCopyright='Copyright (C) 2020 moyiljx' --version-string.FileDescription=$npm_package_productName --version-string.OriginalFilename='zvms.exe' --version-string.InternalName=$npm_package_productName --version-string.ProductName=$npm_package_productName --version-string.ProductVersion=$npm_package_version --asar --icon=logo.ico  --overwrite --download.mirrorOptions.mirror=https://npm.taobao.org/mirrors/electron/"
+    "pack": "./node_modules/.bin/electron-packager . zvms --asar --app-version=%npm_package_version% --out=builds --ignore='^/builds$' --version-string.CompanyName='ZVMS' --version-string.LegalCopyright='Copyright (C) 2020 moyiljx' --version-string.FileDescription=zvms --version-string.OriginalFilename='zvms.exe' --version-string.InternalName=zvms --version-string.ProductName=zvms --version-string.ProductVersion=%npm_package_version% --icon=logo.ico  --overwrite --download.mirrorOptions.mirror=https://npm.taobao.org/mirrors/electron/"
   },
   "main": "background.js",
   "dependencies": {
