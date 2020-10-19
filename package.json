@@ -17,6 +17,7 @@
     "@fortawesome/fontawesome-free": "^5.14.0",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "md5-node": "^1.0.1",
     "sweetalert2": "^8.19.0",
     "vue": "^2.6.12",
     "vue-router": "^3.4.3",

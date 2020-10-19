@@ -49,6 +49,8 @@ import { NOTEMPTY } from "../utils/validation.js"; //校验表单完整性
 import axios from "axios"; //ajax网络库
 import permissions from "../utils/permissions.js";
 
+var md5=require('md5-node');
+
 export default {
   name: "login",
   data: () => ({
@@ -66,7 +68,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.$store.commit("loading", true);
         axios
-          .post("/user/login", this.form)
+          .post("/user/login", {"userid":this.form.userid,"password":md5(this.form.password)})
           .then((response) => {
             //对传回数据进行处理
             console.log(response.data);
@@ -111,12 +113,15 @@ export default {
               this.$store.commit("draweritems", this.drawers);
             } else if (response.data.type == "ERROR") {
               dialogs.toasts.error(response.data.message);
+              this.form.password = undefined;
             } else {
               dialogs.toasts.error("未知错误!");
+              this.form.password = undefined;
             }
           })
           .catch((error) => {
             dialogs.toasts.error(error);
+            this.form.password = undefined;
           })
           .finally(() => {
             this.$store.commit("loading", false);
