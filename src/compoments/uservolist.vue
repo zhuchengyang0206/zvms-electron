@@ -22,19 +22,34 @@
       >
       </v-data-table>
     </v-card-text>
+    <v-dialog v-model="dialog">
+      <v-card>
+        <volinfo :volid="volid" />
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red darken-1" text @click="dialog = false">关闭</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
 <script>
-import dialogs from '../utils/dialogs';
-import axios from "axios"
+import dialogs from "../utils/dialogs";
+import volinfo from "./volinfo.vue";
+import axios from "axios";
 
 export default {
-  name: 'uservolist',
-  props: ['userid'],
+  name: "uservolist",
+  props: ["userid"],
+  components: {
+    volinfo,
+  },
   data: () => ({
     volworks: undefined,
+    dialog: false,
     search: "",
+    volid: undefined,
     headers: [
       { text: "义工ID", value: "volId", align: "start", sortable: true },
       { text: "义工名称", value: "name" },
@@ -44,16 +59,16 @@ export default {
       { text: "完成状态", value: "status" },
     ],
   }),
-  created: function(){
+  created: function () {
     this.init();
   },
   methods: {
-    init: function() {
-      this.$store.commit("loading", true);
+    init: function () {
       this.volworks = undefined;
-      if(this.userid != 0 && this.userid != undefined){
+      if (this.userid != 0 && this.userid != undefined) {
+        this.$store.commit("loading", true);
         axios
-          .post("/user/volbook/"+this.userid)
+          .post("/user/volbook/" + this.userid)
           .then((response) => {
             console.log(response.data);
             if (response.data.type == "ERROR")
@@ -68,17 +83,17 @@ export default {
           .finally(() => {
             this.$store.commit("loading", false);
           });
-        }
+      }
     },
-    rowClick: function(item) {
-      console.log(item)
-      dialogs.toasts.error("没做好，点你妈");
-    }
+    rowClick: function (item) {
+      this.dialog = true;
+      this.volid = item.volId;
+    },
   },
   watch: {
-    userid: function(){
+    userid: function () {
       this.init();
-    }
-  }
-}
+    },
+  },
+};
 </script>

@@ -1,26 +1,18 @@
 <template>
   <v-card flat>
-    <v-card-title
-      ><div class="headline">义工列表</div>
-      <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="搜索"
-        single-line
-        hide-details
-      ></v-text-field>
+    <v-card-title>
+      {{vol.name}}
     </v-card-title>
     <v-card-text>
-      <v-data-table
-        :headers="headers"
-        :items="volworks"
-        :search="search"
-        :loading="$store.state.isLoading"
-        @click:row="rowClick"
-        loading-text="加载中..."
-      >
-      </v-data-table>
+      简介: {{vol.description}}
+      日期: {{vol.date}}
+      实践: {{vol.time}}
+      校内: {{vol.inside}}
+      校外: {{vol.outside}}
+      大型: {{vol.large}}
+      人数: {{vol.stuMax}}
+      现有: {{vol.stuNow}}
+      状态: {{vol.status}}
     </v-card-text>
   </v-card>
 </template>
@@ -30,36 +22,39 @@ import dialogs from '../utils/dialogs';
 import axios from "axios"
 
 export default {
-  name: 'uservolist',
-  props: ['userid'],
+  name: 'volinfo',
+  props: ['volid'],
   data: () => ({
-    volworks: undefined,
-    search: "",
-    headers: [
-      { text: "义工ID", value: "volId", align: "start", sortable: true },
-      { text: "义工名称", value: "name" },
-      { text: "校内时长", value: "inside" },
-      { text: "校外时长", value: "outside" },
-      { text: "大型时长", value: "large" },
-      { text: "完成状态", value: "status" },
-    ],
+    vol: {
+      type: undefined,
+      message: undefined,
+      name: undefined,
+      date: undefined,
+      time: undefined,
+      stuMax: undefined,
+      stuNow: undefined,
+      description: undefined,
+      status: undefined,
+      inside: undefined,
+      outside: undefined,
+      large: undefined
+    }
   }),
   created: function(){
     this.init();
   },
   methods: {
     init: function() {
-      this.$store.commit("loading", true);
-      this.volworks = undefined;
-      if(this.userid != 0 && this.userid != undefined){
+      if(this.volid != 0 && this.volid != undefined){
+        this.$store.commit("loading", true);
         axios
-          .post("/user/volbook/"+this.userid)
+          .post("/volunteer/fetch/"+this.volid+"?"+Math.random())
           .then((response) => {
             console.log(response.data);
             if (response.data.type == "ERROR")
               dialogs.toasts.error(response.data.message);
             else if (response.data.type == "SUCCESS") {
-              this.volworks = response.data.rec;
+              this.vol = response.data;
             } else dialogs.toasts.error("未知错误");
           })
           .catch((error) => {
@@ -70,14 +65,27 @@ export default {
           });
         }
     },
-    rowClick: function(item) {
-      console.log(item)
-      dialogs.toasts.error("没做好，点你妈");
+    fetch: function(){
+      this.vol = {
+      type: undefined,
+      message: undefined,
+      name: undefined,
+      date: undefined,
+      time: undefined,
+      stuMax: undefined,
+      stuNow: undefined,
+      description: undefined,
+      status: undefined,
+      inside: undefined,
+      outside: undefined,
+      large: undefined
+    }
+    this.init();
     }
   },
   watch: {
-    userid: function(){
-      this.init();
+    volid: function(){
+      this.fetch();
     }
   }
 }
