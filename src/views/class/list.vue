@@ -48,7 +48,6 @@ export default {
       axios
         .post("/class/list")
         .then((response) => {
-          console.log(response.data);
           if (response.data.type == "ERROR")
             dialogs.toasts.error(response.data.message);
           else if (response.data.type == "SUCCESS") {
@@ -63,7 +62,6 @@ export default {
         });
     },
     rowClick: function (item) {
-      console.log(item);
       if (this.$store.state.info.permission >= permissions.teacher)
         this.$router.push("/class/stulist/" + item.id);
       else console.log("权限不足，无法跳转");

@@ -6,36 +6,22 @@
         <template v-slot:activator="{ on: menu, attrs }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on: tooltip }">
-              <v-btn
-                color="white"
-                depressed
-                v-bind="attrs"
-                v-on="{ ...tooltip, ...menu }"
-              >
-                <div class="headline">{{ nowclassname }}学生列表</div>
+              <v-btn color="white" depressed v-bind="attrs" v-on="{ ...tooltip, ...menu }">
+                <div class="headline">{{ nowclassname }}</div>
               </v-btn>
+              <div class="headline">学生列表</div>
             </template>
             <span>{{tipText}}</span>
           </v-tooltip>
         </template>
         <v-list>
-          <v-list-item
-            v-for="(item, index) in classes"
-            :key="index"
-            v-on:click="changeclass(item)"
-          >
+          <v-list-item v-for="(item, index) in classes" :key="index" v-on:click="changeclass(item)">
             <v-list-item-title>{{ item.name }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
       <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="搜索"
-        single-line
-        hide-details
-      ></v-text-field>
+      <v-text-field v-model="search" append-icon="mdi-magnify" label="搜索" single-line hide-details></v-text-field>
     </v-card-title>
     <v-card-text>
       <v-data-table
@@ -43,8 +29,18 @@
         :items="students"
         :search="search"
         :loading="$store.state.isLoading"
+        @click:row="rowClick"
         loading-text="加载中..."
       ></v-data-table>
+      <v-dialog v-model="dialog">
+        <v-card>
+          <uservolist :userid="rowUserId" />
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="red darken-1" text @click="dialog = false">关闭</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card-text>
   </v-card>
 </template>
@@ -53,6 +49,7 @@
 import axios from "axios";
 import dialogs from "../../utils/dialogs.js";
 import permissions from "../../utils/permissions.js";
+import uservolist from '../../compoments/uservolist'
 
 export default {
   data: () => ({
@@ -62,6 +59,8 @@ export default {
     nowclass: undefined,
     nowclassname: undefined,
     menudisabled: true,
+    dialog: false,
+    rowUserId: 0,
     tipText: "未启用",
     headers: [
       { text: "学号", value: "id", align: "start", sortable: true },
@@ -72,29 +71,29 @@ export default {
       { text: "完成", value: "finished" },
     ],
   }),
+  components: {
+    uservolist
+  },
   mounted: function () {
     this.pageload();
   },
   methods: {
     pageload() {
-      console.log(this.$route.params.classid);
-      
       this.$store.commit("loading", true);
       axios
         .post("/class/list")
         .then((response) => {
-          console.log(response.data);
           if (response.data.type == "ERROR")
             dialogs.toasts.error(response.data.message);
           else if (response.data.type == "SUCCESS") {
             this.classes = response.data.class;
             this.nowclass = this.$store.state.info.class;
             this.nowclassname = this.$store.state.info.classname;
-            
+
             if (this.$store.state.info.permission > permissions.secretary) {
               this.menudisabled = false;
-              this.tipText="点击选择班级";
-              if(this.$route.params != undefined){
+              this.tipText = "点击选择班级";
+              if (this.$route.params != undefined) {
                 this.nowclass = this.$route.params.classid;
                 this.nowclassname = this.classid2name(this.nowclass);
               }
@@ -110,12 +109,12 @@ export default {
         });
     },
 
-    fetchstulist: function() {
+    fetchstulist: function () {
       this.$store.commit("loading", true);
+      this.students = undefined;
       axios
         .post("/class/stulist/" + this.nowclass)
         .then((response) => {
-          console.log(response.data);
           if (response.data.type == "ERROR")
             dialogs.toasts.error(response.data.message);
           else if (response.data.type == "SUCCESS") {
@@ -132,6 +131,11 @@ export default {
         .finally(() => {
           this.$store.commit("loading", false);
         });
+    },
+
+    rowClick: function (item) {
+      this.dialog = true;
+      this.rowUserId = item.id
     },
 
     changeclass: function (item) {
@@ -157,13 +161,13 @@ export default {
       return result ? "是" : "否";
     },
 
-    classid2name: function(classid){
-      for(var i=0;i<this.classes.length;i++){
-        if(this.classes[i]['id']==classid){
-            return this.classes[i]['name'];
+    classid2name: function (classid) {
+      for (var i = 0; i < this.classes.length; i++) {
+        if (this.classes[i]["id"] == classid) {
+          return this.classes[i]["name"];
         }
       }
-    }
+    },
   },
 };
 </script>

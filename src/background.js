@@ -62,18 +62,18 @@ function createWindow() {
     win.on('hide', () => {
         //tray.setHighlightMode('never')
     })
-    tray = new Tray(path.join(__dirname, 'assests/logo.png'))
-    const contextMenu = Menu.buildFromTemplate([
-        { label: 'ZVMS' },
-        { label: '显示', click: () => win.show() },
-        { label: '退出', click: () => { win.destroy() } }
-    ])
-    tray.setToolTip('ZVMS')
-    tray.setContextMenu(contextMenu)
-    tray.on('click', () => {
-        win.isVisible() ? win.hide() : win.show()
-        win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true)
-    })
+    // tray = new Tray(path.join(__dirname, 'assests/logo.png'))
+    // const contextMenu = Menu.buildFromTemplate([
+    //     { label: 'ZVMS' },
+    //     { label: '显示', click: () => win.show() },
+    //     { label: '退出', click: () => { win.destroy() } }
+    // ])
+    // tray.setToolTip('ZVMS')
+    // tray.setContextMenu(contextMenu)
+    // tray.on('click', () => {
+    //     win.isVisible() ? win.hide() : win.show()
+    //     win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true)
+    // })
 }
 
 // Quit when all windows are closed.

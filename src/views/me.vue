@@ -24,8 +24,6 @@ export default {
       axios
         .post("/userinfo.php")
         .then((response) => {
-          console.log(response.data);
-          console.log(this.$store.state.info);
           if (response.data.type == "SUCCESS") {
             this.username = response.data.username;
           } else if (response.data.type == "ERROR") {

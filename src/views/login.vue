@@ -71,7 +71,6 @@ export default {
           .post("/user/login", {"userid":this.form.userid,"password":md5(this.form.password)})
           .then((response) => {
             //对传回数据进行处理
-            console.log(response.data);
             if (response.data.type == "SUCCESS") {
               dialogs.toasts.success(response.data.message);
               //将一切保存到$store
