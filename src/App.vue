@@ -143,7 +143,7 @@ export default {
     },
     getTheme() {
       axios
-        .get("https://zvms.gitee.io/config/theme.json&"+Math.random())
+        .get("https://zvms.gitee.io/config/theme.json")
         .then((response) => {
             this.$vuetify.theme.themes.light = response.data
         })

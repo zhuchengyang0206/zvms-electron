@@ -47,7 +47,7 @@ export default {
     pageload() {
       this.$store.commit("loading", true);
       axios
-        .post("/class/list&"+Math.random())
+        .post("/class/list")
         .then((response) => {
           if (response.data.type == "ERROR")
             dialogs.toasts.error(response.data.message);
