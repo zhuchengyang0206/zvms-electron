@@ -34,6 +34,14 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 //     data = qs.stringify(data);
 //     return data;
 // }]
+axios.interceptors.request.use(
+    config => {
+        config.params = {...config.params, timestamp: Date.now()};
+        config.headers.Authorize = localStorage.getItem('token') || '';
+        return config
+    },
+    error => Promise.reject(error)
+);
 
 new Vue({
     router,

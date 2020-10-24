@@ -13,6 +13,7 @@
     </v-card-title>
     <v-card-text>
       <v-data-table
+        fixed-header
         :headers="headers"
         :items="volworks"
         :search="search"

@@ -20,12 +20,13 @@ export default {
       this.$store.commit("info", {
         username: undefined,
         permission: undefined,
+        class: undefined,
+        classname: undefined
       });
       //之后这里还要做点删除cookie什么的
       axios
         .post("/user/logout")
         .then((response) => {
-          console.log(response.data);
           if (response.data.type == "SUCCESS") {
             dialogs.toasts.success(response.data.message);
           } else if (response.data.type == "ERROR") {

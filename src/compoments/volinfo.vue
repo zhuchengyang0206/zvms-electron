@@ -50,7 +50,7 @@ export default {
       if(this.volid != 0 && this.volid != undefined){
         this.$store.commit("loading", true);
         axios
-          .post("/volunteer/fetch/"+this.volid+"?"+Math.random())
+          .post("/volunteer/fetch/"+this.volid)
           .then((response) => {
             if (response.data.type == "ERROR")
               dialogs.toasts.error(response.data.message);
