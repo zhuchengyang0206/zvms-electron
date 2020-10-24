@@ -1,7 +1,7 @@
 <template>
   <v-card flat>
     <v-card-title
-      ><div class="headline">义工列表</div>
+      ><div class="headline">{{title}} 义工列表</div>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -42,7 +42,7 @@ import axios from "axios";
 
 export default {
   name: "uservolist",
-  props: ["userid"],
+  props: ["userid", "title"],
   components: {
     volinfo,
   },

@@ -6,22 +6,37 @@
         <template v-slot:activator="{ on: menu, attrs }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on: tooltip }">
-              <v-btn color="white" depressed v-bind="attrs" v-on="{ ...tooltip, ...menu }">
+              <v-btn
+                color="white"
+                depressed
+                v-bind="attrs"
+                v-on="{ ...tooltip, ...menu }"
+              >
                 <div class="headline">{{ nowclassname }}</div>
               </v-btn>
               <div class="headline">学生列表</div>
             </template>
-            <span>{{tipText}}</span>
+            <span>{{ tipText }}</span>
           </v-tooltip>
         </template>
         <v-list>
-          <v-list-item v-for="(item, index) in classes" :key="index" v-on:click="changeclass(item)">
+          <v-list-item
+            v-for="(item, index) in classes"
+            :key="index"
+            v-on:click="changeclass(item)"
+          >
             <v-list-item-title>{{ item.name }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
       <v-spacer></v-spacer>
-      <v-text-field v-model="search" append-icon="mdi-magnify" label="搜索" single-line hide-details></v-text-field>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="搜索"
+        single-line
+        hide-details
+      ></v-text-field>
     </v-card-title>
     <v-card-text>
       <v-data-table
@@ -35,10 +50,12 @@
       ></v-data-table>
       <v-dialog v-model="dialog">
         <v-card>
-          <uservolist :userid="rowUserId" />
+          <uservolist :userid="rowUserId" :title="rowUserName" />
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="red darken-1" text @click="dialog = false">关闭</v-btn>
+            <v-btn color="red darken-1" text @click="dialog = false"
+              >关闭</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -50,7 +67,7 @@
 import axios from "axios";
 import dialogs from "../../utils/dialogs.js";
 import permissions from "../../utils/permissions.js";
-import uservolist from '../../compoments/uservolist'
+import uservolist from "../../compoments/uservolist";
 
 export default {
   data: () => ({
@@ -62,6 +79,7 @@ export default {
     menudisabled: true,
     dialog: false,
     rowUserId: 0,
+    rowUserName: undefined,
     tipText: "未启用",
     headers: [
       { text: "学号", value: "id", align: "start", sortable: true },
@@ -73,7 +91,7 @@ export default {
     ],
   }),
   components: {
-    uservolist
+    uservolist,
   },
   mounted: function () {
     this.pageload();
@@ -136,7 +154,8 @@ export default {
 
     rowClick: function (item) {
       this.dialog = true;
-      this.rowUserId = item.id
+      this.rowUserId = item.id;
+      this.rowUserName = item.name;
     },
 
     changeclass: function (item) {
