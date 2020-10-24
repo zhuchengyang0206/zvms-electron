@@ -145,7 +145,7 @@ export default {
       axios
         .get("https://zvms.gitee.io/config/theme.json")
         .then((response) => {
-            this.$vuetify.theme.themes.light = response.data
+            this.$vuetify.theme.themes = response.data
         })
         .catch((error) => {
           dialogs.toasts.error(error);
