@@ -7,7 +7,6 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on: tooltip }">
               <v-btn
-                color="white"
                 depressed
                 v-bind="attrs"
                 v-on="{ ...tooltip, ...menu }"

@@ -77,6 +77,14 @@
             v-show="$store.state.isLoading"
           ></v-progress-circular>
         </div>
+        <div class="pa-4">
+          <v-icon
+            @click="changeColorTheme"
+            color="white"
+            style="-webkit-app-region: no-drag; margin-right: 0"
+            >mdi-brightness-6</v-icon
+          >
+        </div>
       </template>
     </v-navigation-drawer>
     <v-main>
@@ -91,7 +99,9 @@
       padless
       color="rgba(255,255,255,0.3)"
     >
-      <v-col class="text-center" cols="12"> ©mo_yi 2020 </v-col>
+      <v-col class="text-center" cols="12"
+        >{{ new Date().getFullYear() }} - ©mo_yi</v-col
+      >
     </v-footer>
   </v-app>
 </template>
@@ -110,8 +120,8 @@
 }
 </style>
 <script>
-import dialogs from './utils/dialogs'
-import axios from 'axios'
+import dialogs from "./utils/dialogs";
+import axios from "axios";
 
 const { BrowserWindow } = window.require("electron").remote;
 export default {
@@ -121,8 +131,8 @@ export default {
     drawer: true,
     phone: false,
   }),
-  mounted: function(){
-    this.getTheme()
+  mounted: function () {
+    this.getTheme();
   },
   methods: {
     minwindow() {
@@ -145,12 +155,15 @@ export default {
       axios
         .get("https://zvms.gitee.io/config/theme.json")
         .then((response) => {
-            this.$vuetify.theme.themes = response.data
+          this.$vuetify.theme.themes = response.data;
         })
         .catch((error) => {
           dialogs.toasts.error(error);
         })
         .finally(() => {});
+    },
+    changeColorTheme() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
   },
 };
