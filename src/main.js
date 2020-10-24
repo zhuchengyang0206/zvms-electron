@@ -10,7 +10,7 @@ Vue.config.productionTip = false
 
 //读取远程配置
 axios
-    .get("https://zvms.gitee.io/config/zvms.json?"+Math.random())
+    .get("https://zvms.gitee.io/config/zvms.json&"+Math.random())
     .then((response) => {
         console.log(response.data);
         if (response.data.type == "SUCCESS") {

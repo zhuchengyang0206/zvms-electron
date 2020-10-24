@@ -25,7 +25,7 @@ export default {
       });
       //之后这里还要做点删除cookie什么的
       axios
-        .post("/user/logout")
+        .post("/user/logout&"+Math.random())
         .then((response) => {
           if (response.data.type == "SUCCESS") {
             dialogs.toasts.success(response.data.message);

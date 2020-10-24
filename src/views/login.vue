@@ -68,7 +68,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.$store.commit("loading", true);
         axios
-          .post("/user/login", {"userid":this.form.userid,"password":md5(this.form.password)})
+          .post("/user/login?"+Math.random(), {"userid":this.form.userid,"password":md5(this.form.password)})
           .then((response) => {
             //对传回数据进行处理
             if (response.data.type == "SUCCESS") {

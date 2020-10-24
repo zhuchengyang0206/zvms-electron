@@ -7,7 +7,12 @@
       overflow-y: hidden;
     "
   >
-    <v-system-bar window color="primary" style="-webkit-app-region: drag" align-center>
+    <v-system-bar
+      window
+      color="primary"
+      style="-webkit-app-region: drag"
+      align-center
+    >
       <span></span>
       <v-spacer></v-spacer>
       <v-icon
@@ -66,11 +71,11 @@
 
       <template v-slot:append>
         <div class="pa-3">
-        <v-progress-circular
-          color="white"
-          indeterminate
-          v-show="$store.state.isLoading"
-        ></v-progress-circular>
+          <v-progress-circular
+            color="white"
+            indeterminate
+            v-show="$store.state.isLoading"
+          ></v-progress-circular>
         </div>
       </template>
     </v-navigation-drawer>
@@ -105,6 +110,9 @@
 }
 </style>
 <script>
+import dialogs from './utils/dialogs'
+import axios from 'axios'
+
 const { BrowserWindow } = window.require("electron").remote;
 export default {
   name: "App",
@@ -113,6 +121,9 @@ export default {
     drawer: true,
     phone: false,
   }),
+  mounted: function(){
+    this.getTheme()
+  },
   methods: {
     minwindow() {
       const window = BrowserWindow.getFocusedWindow();
@@ -129,6 +140,17 @@ export default {
     closewindow() {
       const window = BrowserWindow.getFocusedWindow();
       window.close();
+    },
+    getTheme() {
+      axios
+        .get("https://zvms.gitee.io/config/theme.json&"+Math.random())
+        .then((response) => {
+            this.$vuetify.theme.themes.light = response.data
+        })
+        .catch((error) => {
+          dialogs.toasts.error(error);
+        })
+        .finally(() => {});
     },
   },
 };
