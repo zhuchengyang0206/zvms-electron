@@ -3,17 +3,19 @@
     <v-card-title>
       {{vol.name}}
     </v-card-title>
-    <v-card-text>
-      简介: {{vol.description}}
-      日期: {{vol.date}}
-      实践: {{vol.time}}
-      校内: {{vol.inside}}
-      校外: {{vol.outside}}
-      大型: {{vol.large}}
-      人数: {{vol.stuMax}}
-      现有: {{vol.stuNow}}
-      状态: {{vol.status}}
-    </v-card-text>
+    <v-simple-table dense>
+      <tbody>
+        <tr><td>简介</td><td>{{vol.description}}</td></tr>
+        <tr><td>日期</td><td>{{vol.date}}</td></tr>
+        <tr><td>时间</td><td>{{vol.time}}</td></tr>
+        <tr><td>校内时长</td><td>{{vol.inside}}</td></tr>
+        <tr><td>校外时长</td><td>{{vol.outside}}</td></tr>
+        <tr><td>大型时长</td><td>{{vol.large}}</td></tr>
+        <tr><td>人数</td><td>{{vol.stuMax}}</td></tr>
+        <tr><td>已报名</td><td>{{vol.stuNow}}</td></tr>
+        <tr><td>状态</td><td>{{vol.status}}</td></tr>
+      </tbody>
+    </v-simple-table>
   </v-card>
 </template>
 
@@ -50,7 +52,6 @@ export default {
         axios
           .post("/volunteer/fetch/"+this.volid+"?"+Math.random())
           .then((response) => {
-            console.log(response.data);
             if (response.data.type == "ERROR")
               dialogs.toasts.error(response.data.message);
             else if (response.data.type == "SUCCESS") {

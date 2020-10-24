@@ -70,7 +70,6 @@ export default {
         axios
           .post("/user/volbook/" + this.userid)
           .then((response) => {
-            console.log(response.data);
             if (response.data.type == "ERROR")
               dialogs.toasts.error(response.data.message);
             else if (response.data.type == "SUCCESS") {
