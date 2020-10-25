@@ -62,18 +62,19 @@ function createWindow() {
     win.on('hide', () => {
         //tray.setHighlightMode('never')
     })
-    // tray = new Tray(path.join(__dirname, 'assests/logo.png'))
-    // const contextMenu = Menu.buildFromTemplate([
-    //     { label: 'ZVMS' },
-    //     { label: '显示', click: () => win.show() },
-    //     { label: '退出', click: () => { win.destroy() } }
-    // ])
-    // tray.setToolTip('ZVMS')
-    // tray.setContextMenu(contextMenu)
-    // tray.on('click', () => {
-    //     win.isVisible() ? win.hide() : win.show()
-    //     win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true)
-    // })
+    //图标找不到啊草
+    tray = process.env.NODE_ENV === 'development' ? new Tray('build/icon.ico'):new Tray(path.join(__static, './logo.ico'));
+    const contextMenu = Menu.buildFromTemplate([
+        { label: 'ZVMS' },
+        { label: '显示', click: () => win.show() },
+        { label: '退出', click: () => { win.destroy() } }
+    ])
+    tray.setToolTip('ZVMS')
+    tray.setContextMenu(contextMenu)
+    tray.on('click', () => {
+        win.isVisible() ? win.hide() : win.show()
+        win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true)
+    })
 }
 
 // Quit when all windows are closed.
@@ -81,6 +82,7 @@ app.on('window-all-closed', () => {
     // On macOS it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
+        app.quit()
         app.quit()
     }
 })
