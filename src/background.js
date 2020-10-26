@@ -63,7 +63,7 @@ function createWindow() {
         //tray.setHighlightMode('never')
     })
     //图标找不到啊草
-    tray = process.env.NODE_ENV === 'development' ? new Tray('build/icon.ico'):new Tray(path.join(__static, './logo.ico'));
+    tray = new Tray('images/logo.png');
     const contextMenu = Menu.buildFromTemplate([
         { label: 'ZVMS' },
         { label: '显示', click: () => win.show() },

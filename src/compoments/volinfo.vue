@@ -30,7 +30,7 @@ export default {
     vol: {
       type: undefined,
       message: undefined,
-      name: undefined,
+      name: "加载中...",
       date: undefined,
       time: undefined,
       stuMax: undefined,
@@ -70,7 +70,7 @@ export default {
       this.vol = {
       type: undefined,
       message: undefined,
-      name: undefined,
+      name: "加载中...",
       date: undefined,
       time: undefined,
       stuMax: undefined,
