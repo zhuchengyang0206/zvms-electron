@@ -24,6 +24,7 @@ function createWindow() {
     win = new BrowserWindow({
         width: 800,
         height: 600,
+        icon: path.join(__static,'logo.png'),
         frame: false,
         titleBarStyle: 'hidden',
         show: false,
@@ -63,7 +64,7 @@ function createWindow() {
         //tray.setHighlightMode('never')
     })
     //图标找不到啊草
-    tray = new Tray('images/logo.png');
+    tray = new Tray(path.join(__static,'logo.png'));
     const contextMenu = Menu.buildFromTemplate([
         { label: 'ZVMS' },
         { label: '显示', click: () => win.show() },

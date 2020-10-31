@@ -8,6 +8,7 @@
     "
   >
     <v-system-bar
+      app
       window
       color="primary"
       style="-webkit-app-region: drag"

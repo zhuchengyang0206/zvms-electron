@@ -1,14 +1,6 @@
 {
   "name": "zvms-electron",
   "version": "0.1.0",
-  "build": {
-	"extraResources": [
-        {
-          "from": "images/", 
-          "to": "images/"
-        }
-      ]
-  },
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
