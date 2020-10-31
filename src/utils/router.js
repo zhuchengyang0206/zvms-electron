@@ -5,6 +5,7 @@ import login from '../views/login.vue'
 import me from '../views/me.vue'
 import logout from '../views/logout.vue'
 import * as classes from '../views/class'
+import * as volunteer from '../views/volunteer'
 //import admin from '../views/admin.vue'
 //import about from '../views/about.vue'
 //import error404 from '../views/error404.vue'
@@ -46,6 +47,10 @@ export default new Router({
     {
       path: '/class/stulist/:classid',
       component: classes.stulist
+    },
+    {
+      path: '/volunteer/list',
+      component: volunteer.list
     }
     /*    // 用户相关
         {

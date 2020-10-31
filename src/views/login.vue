@@ -102,6 +102,12 @@ export default {
                   to: "/class/stulist/"+response.data.class,
                   icon: "mdi-view-list",
                 });
+                
+                this.drawers.push({
+                  title: "义工列表",
+                  to: "/volunteer/list",
+                  icon: "mdi-view-list",
+                });
               }
 
               this.drawers.push({
