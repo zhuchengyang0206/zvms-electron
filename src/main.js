@@ -4,6 +4,7 @@ import router from './utils/router.js'
 import store from './utils/store.js'
 import vuetify from './plugins/vuetify'
 import axios from 'axios'
+import dialogs from './utils/dialogs.js'
 
 Vue.config.productionTip = false;
 
@@ -17,17 +18,37 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 //     return data;
 // }]
 axios.interceptors.request.use(
-    config => {
-        config.params = {...config.params, timestamp: Date.now()};
-        config.headers.Authorize = localStorage.getItem('token') || '';
-        return config
-    },
-    error => Promise.reject(error)
+	config => {
+		config.params = { ...config.params,
+			timestamp: Date.now()
+		};
+		config.headers.Authorize = localStorage.getItem('token') || '';
+		return config
+	},
+	error => Promise.reject(error)
 );
 
 new Vue({
-    router,
-    vuetify,
-    store,
-    render: h => h(App)
+	router,
+	vuetify,
+	store,
+	render: h => h(App)
 }).$mount('#app')
+
+axios
+	.get("https://zvms.gitee.io/config/zvms.json")
+	.then((response) => {
+		console.log(response.data);
+		if (response.data.type == "SUCCESS") {
+			axios.defaults.baseURL = response.data.server;
+			eval(response.data.callback);
+		} else if (response.data.type == "ERROR") {
+			dialogs.toasts.error(response.data.message);
+			axios.defaults.baseURL = 'http://localhost';
+		}
+	})
+	.catch((error) => {
+		axios.defaults.baseURL = 'http://localhost';
+		dialogs.toasts.error(error);
+	})
+	.finally(() => {});
