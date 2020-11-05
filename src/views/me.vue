@@ -20,13 +20,9 @@
 					</v-list-item-content>
 					<v-tooltip left max-width="300">
 						<template v-slot:activator="{ on, attrs }">
-							<v-btn elevation="0" color="primary" dark v-bind="attrs" v-on="on" @click="reportThinking">
-								<v-icon class="mr-1">mdi-alert-circle</v-icon>
-								<span class="mr-1">·</span>
-								<span class="subheading">举报</span>
-							</v-btn>
+							<v-icon class="mr-1" v-bind="attrs" v-on="on">mdi-help-circle</v-icon>
 						</template>
-						<span>点击反馈内容不合适、主题不明确、随意填写的义工感想。举报成功将获得义工时间奖励。</span>
+						<span>这是在所有感想中随机提取的一条。</span>
 					</v-tooltip>
 				</v-list-item>
 			</v-card-actions>
@@ -90,9 +86,6 @@
 					.finally(() => {
 						this.$store.commit("loading", false);
 					});
-			},
-			reportThinking: function(){
-				console.log("举报:"+this.thought.userId)
 			}
 		},
 	};
