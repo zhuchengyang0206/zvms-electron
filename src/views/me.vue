@@ -1,8 +1,16 @@
 <template>
 	<v-container>
 		<v-card>
-			<v-card-title>你好,</v-card-title>
-			<v-card-text>{{$store.state.isLogined}},{{$store.state.info.username}},{{$store.state.info.permission}}</v-card-text>
+			<v-card-title>
+				你好,
+				<v-card-text>
+					{{$store.state.info.username}}
+					<v-chip label>	
+						<v-icon left>mdi-label</v-icon>
+						{{permission2str($store.state.info.permission)}}
+					</v-chip>
+				</v-card-text>
+			</v-card-title>
 		</v-card>
 		<v-card dark color="primary">
 			<v-card-title>
@@ -32,7 +40,8 @@
 
 <script>
 	import axios from "axios";
-	import dialogs from "../utils/dialogs.js";
+	import dialogs from "../utils/dialogs";
+	import permissions from "../utils/permissions";
 
 	export default {
 		name: "me",
@@ -44,29 +53,9 @@
 			}
 		}),
 		mounted: function() {
-			//this.pageload();
 			this.randomThought();
 		},
 		methods: {
-			pageload() {
-				this.$store.commit("loading", true);
-				//这一段暂时用不着了，因为网络提取改到从$store里面提取了,但是先留着吧
-				axios
-					.post("/userinfo.php")
-					.then((response) => {
-						if (response.data.type == "SUCCESS") {
-							this.username = response.data.username;
-						} else if (response.data.type == "ERROR") {
-							dialogs.toasts.error(response.data.message);
-						}
-					})
-					.catch((error) => {
-						dialogs.toasts.error(error);
-					})
-					.finally(() => {
-						this.$store.commit("loading", false);
-					});
-			},
 			randomThought: function() {
 				this.$store.commit("loading", true);
 				axios
@@ -86,6 +75,18 @@
 					.finally(() => {
 						this.$store.commit("loading", false);
 					});
+			},
+			permission2str: function(per){
+				switch(per){
+					case permissions.secretary:
+						return "团支书";
+					case permissions.teacher:
+						return "教师";
+					case permissions.admin:
+						return "管理员";
+					case permissions.system:
+						return "系统";
+				}
 			}
 		},
 	};

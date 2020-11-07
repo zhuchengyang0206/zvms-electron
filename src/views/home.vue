@@ -35,27 +35,10 @@ export default {
               axios.defaults.baseURL = 'http://localhost';
               dialogs.toasts.error(error);
           })
-          .finally(() => {this.checkLogin();this.$store.commit("loading", false);});
-    },
-
-    checkLogin: function(){
-      this.$store.commit("loading", true);
-      axios
-        .post("/user/info")
-        .then((response) => {
-          if (response.data.type == "ERROR"){
+          .finally(() => {
+            this.$store.commit("loading", false);
             this.$router.push("/login");
-          }
-          else if (response.data.type == "SUCCESS") {
-            this.$router.push("/me");
-          } else dialogs.toasts.error("未知错误");
-        })
-        .catch((error) => {
-          dialogs.toasts.error(error);
-        })
-        .finally(() => {
-          this.$store.commit("loading", false);
-        });
+          });
     }
   },
 };
