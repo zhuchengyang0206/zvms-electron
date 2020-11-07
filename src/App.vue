@@ -15,7 +15,7 @@
       style="-webkit-app-region: drag"
       align-center
     >
-      <span>{{hitokoto.hitokoto}} - {{hitokoto.from}}</span>
+      <span>{{hitokoto.hitokoto}} - {{hitokoto.from}}·{{hitokoto.from_who}}</span>
       <v-spacer></v-spacer>
       <v-icon
         @click="minwindow"
@@ -135,7 +135,7 @@ export default {
     hitokoto: {
       hitokoto: undefined,
       from: undefined,
-      from_who: undefined
+      from_who: undefined,
     }
   }),
   mounted: function () {

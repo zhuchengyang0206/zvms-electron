@@ -41,14 +41,17 @@ export default new Router({
 		},
 		{
 			path: '/class/list',
+			name: 'classList',
 			component: classes.list
 		},
 		{
 			path: '/class/stulist/:classid',
+			name: 'classStulist',
 			component: classes.stulist
 		},
 		{
 			path: '/volunteer/list',
+			name: 'volunteerList',
 			component: volunteer.list
 		}
 	]

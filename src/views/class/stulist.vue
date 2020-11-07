@@ -101,8 +101,9 @@ export default {
       axios
         .post("/class/list")
         .then((response) => {
-          if (response.data.type == "ERROR")
+          if (response.data.type == "ERROR"){
             dialogs.toasts.error(response.data.message);
+          }
           else if (response.data.type == "SUCCESS") {
             this.classes = response.data.class;
             this.nowclass = this.$store.state.info.class;

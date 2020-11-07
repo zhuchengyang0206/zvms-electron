@@ -5,9 +5,17 @@
 				你好,
 				<v-card-text>
 					{{$store.state.info.username}}
-					<v-chip label>	
+					<v-chip>	
 						<v-icon left>mdi-label</v-icon>
 						{{permission2str($store.state.info.permission)}}
+					</v-chip>
+					<v-chip>	
+						<v-icon left>mdi-label</v-icon>
+						{{$store.state.info.classname}}
+					</v-chip>
+					<v-chip>	
+						<v-icon left>mdi-label</v-icon>
+						{{$store.state.info.class}}
 					</v-chip>
 				</v-card-text>
 			</v-card-title>
