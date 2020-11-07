@@ -20,6 +20,8 @@
         :loading="$store.state.isLoading"
         @click:row="rowClick"
         loading-text="加载中..."
+        no-data-text="没有数据哦"
+        no-results-text="没有结果"
       >
       </v-data-table>
     </v-card-text>

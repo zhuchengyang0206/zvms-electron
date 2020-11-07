@@ -1,8 +1,8 @@
 <template>
   <v-card>
     <v-card-title>
-      <!-- <div class="headline">学生列表</div> -->
-      <v-menu :disabled="menudisabled">
+      <!-- 别问我为什么520而不是500px，问就是防止用户看到完整的item就以为不能滚动 -->
+      <v-menu :disabled="menudisabled" rounded max-height="520px">
         <template v-slot:activator="{ on: menu, attrs }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on: tooltip }">
@@ -46,6 +46,8 @@
         :loading="$store.state.isLoading"
         @click:row="rowClick"
         loading-text="加载中..."
+        no-data-text="没有数据哦"
+        no-results-text="没有结果"
       ></v-data-table>
       <v-dialog v-model="dialog">
         <v-card>
@@ -79,7 +81,7 @@ export default {
     dialog: false,
     rowUserId: 0,
     rowUserName: undefined,
-    tipText: "未启用",
+    tipText: "班级",
     headers: [
       { text: "学号", value: "id", align: "start", sortable: true },
       { text: "姓名", value: "name" },
@@ -124,7 +126,11 @@ export default {
         })
         .finally(() => {
           this.$store.commit("loading", false);
-          this.fetchstulist();
+          //对团支书以上等级加入特殊判断防止报错
+          if(this.$store.state.info.permission > permissions.secretary)
+            this.nowclassname = "点击选择班级";
+          else
+            this.fetchstulist();
         });
     },
 

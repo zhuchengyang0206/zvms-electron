@@ -4,7 +4,6 @@ import router from './utils/router.js'
 import store from './utils/store.js'
 import vuetify from './plugins/vuetify'
 import axios from 'axios'
-import dialogs from './utils/dialogs.js'
 
 Vue.config.productionTip = false;
 
@@ -34,21 +33,3 @@ new Vue({
 	store,
 	render: h => h(App)
 }).$mount('#app')
-
-axios
-	.get("https://zvms.gitee.io/config/zvms.json")
-	.then((response) => {
-		console.log(response.data);
-		if (response.data.type == "SUCCESS") {
-			axios.defaults.baseURL = response.data.server;
-			eval(response.data.callback);
-		} else if (response.data.type == "ERROR") {
-			dialogs.toasts.error(response.data.message);
-			axios.defaults.baseURL = 'http://localhost';
-		}
-	})
-	.catch((error) => {
-		axios.defaults.baseURL = 'http://localhost';
-		dialogs.toasts.error(error);
-	})
-	.finally(() => {});
