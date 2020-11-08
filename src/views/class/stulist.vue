@@ -127,7 +127,7 @@ export default {
         .finally(() => {
           this.$store.commit("loading", false);
           //对团支书以上等级加入特殊判断防止报错
-          if(this.$store.state.info.permission > permissions.secretary)
+          if(this.$store.state.info.permission > permissions.secretary && this.$route.params.classid <= 200000)
             this.nowclassname = "点击选择班级";
           else
             this.fetchstulist();
