@@ -18,6 +18,20 @@ let tray = null
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
 
+const openDefaultBrowser = function (url) {
+    var exec = require('child_process').exec;
+    switch (process.platform) {
+        case "darwin":
+            exec('open ' + url);
+            break;
+        case "win32":
+            exec('start ' + url);
+            break;
+        default:
+            exec('xdg-open', [url]);
+    }
+}
+
 function createWindow() {
     // Create the browser window.
     Menu.setApplicationMenu(null)
@@ -66,8 +80,8 @@ function createWindow() {
     //图标找不到啊草
     tray = new Tray(path.join(__static,'logo.png'));
     const contextMenu = Menu.buildFromTemplate([
-        { label: 'ZVMS' },
-        { label: '显示', click: () => win.show() },
+        { label: 'ZVMS', click: () => { openDefaultBrowser('https://zvms.gitee.io/zvms-doc') } },
+        { label: '显示', click: () => { win.show() } },
         { label: '退出', click: () => { win.destroy() } }
     ])
     tray.setToolTip('ZVMS')
