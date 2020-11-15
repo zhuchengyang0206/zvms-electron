@@ -8,12 +8,14 @@
     "
   >
     <v-system-bar
+      app
       window
       color="primary"
+      dark
       style="-webkit-app-region: drag"
       align-center
     >
-      <span></span>
+      <span>{{hitokoto.hitokoto}} - {{hitokoto.from}}·{{hitokoto.from_who}}</span>
       <v-spacer></v-spacer>
       <v-icon
         @click="minwindow"
@@ -130,9 +132,15 @@ export default {
     activeBtn: 1,
     drawer: true,
     phone: false,
+    hitokoto: {
+      hitokoto: undefined,
+      from: undefined,
+      from_who: undefined,
+    }
   }),
   mounted: function () {
     this.getTheme();
+    this.getHitokoto();
   },
   methods: {
     minwindow() {
@@ -152,6 +160,7 @@ export default {
       window.close();
     },
     getTheme() {
+      this.$store.commit("loading", true);
       axios
         .get("https://zvms.gitee.io/config/theme.json")
         .then((response) => {
@@ -160,11 +169,25 @@ export default {
         .catch((error) => {
           dialogs.toasts.error(error);
         })
-        .finally(() => {});
+        .finally(() => {this.$store.commit("loading", false);});
     },
     changeColorTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
+    getHitokoto(){
+      this.$store.commit("loading", true);
+      axios
+        .get("https://v1.hitokoto.cn")
+        .then((response) => {
+          this.hitokoto.hitokoto = response.data.hitokoto;
+          this.hitokoto.from = response.data.from;
+          this.hitokoto.from_who = response.data.from_who;
+        })
+        .catch((error) => {
+          dialogs.toasts.error(error);
+        })
+        .finally(() => {this.$store.commit("loading", false);})
+    }
   },
 };
 </script>
