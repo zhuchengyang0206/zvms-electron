@@ -71,7 +71,7 @@ export default {
       if (this.userid != 0 && this.userid != undefined) {
         this.$store.commit("loading", true);
         axios
-          .post("/user/volbook/" + this.userid)
+          .post("/student/volbook/" + this.userid)
           .then((response) => {
             if (response.data.type == "ERROR")
               dialogs.toasts.error(response.data.message);
