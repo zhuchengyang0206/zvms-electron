@@ -7,6 +7,35 @@
       overflow-y: hidden;
     "
   >
+    <v-system-bar
+      app
+      window
+      color="primary"
+      dark
+      style="-webkit-app-region: drag"
+      align-center
+    >
+      <span>{{hitokoto.hitokoto}} - {{hitokoto.from}}·{{hitokoto.from_who}}</span>
+      <v-spacer></v-spacer>
+      <v-icon
+        @click="minwindow"
+        color="white"
+        style="-webkit-app-region: no-drag"
+        >mdi-window-minimize</v-icon
+      >
+      <v-icon
+        @click="maxwindow"
+        color="white"
+        style="-webkit-app-region: no-drag"
+        >mdi-window-maximize</v-icon
+      >
+      <v-icon
+        @click="closewindow"
+        color="white"
+        style="-webkit-app-region: no-drag; margin-right: 0"
+        >mdi-close</v-icon
+      >
+    </v-system-bar>
     <v-navigation-drawer
       color="primary"
       expand-on-hover
