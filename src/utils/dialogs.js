@@ -28,12 +28,18 @@ export default {
             })
         }
     },
-    confirm: async(msg) => {
+    confirm: async(msg, callback) => {
         //console.log(`%c${new Date()}\n${msg}`, 'color: #f1c40f')
-        return (await Swal.fire({
+        await Swal.fire({
             title: '三思而后行',
             text: msg || '确定操作？',
-            type: 'warning'
-        })).value
+            type: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "确定",
+			cancelButtonText: "取消"
+        }).then( (tmp)=>{
+			callback(tmp.value);
+		});
     }
 }

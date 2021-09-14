@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import dialogs from "../../utils/dialogs.js";
+import dialogs from "../../utils/dialogs";
+import zutils from "../../utils/zutils";
 import permissions from "../../utils/permissions";
 
 export default {
@@ -46,27 +46,21 @@ export default {
     this.pageload();
   },
   methods: {
-    pageload() {
+    async pageload() {
       this.$store.commit("loading", true);
-      axios
-        .post("/class/list")
-        .then((response) => {
-          if (response.data.type == "ERROR")
-            dialogs.toasts.error(response.data.message);
-          else if (response.data.type == "SUCCESS") {
-            this.classes = response.data.class;
-          } else dialogs.toasts.error("未知错误");
-        })
-        .catch((error) => {
-          dialogs.toasts.error(error);
-        })
-        .finally(() => {
-          this.$store.commit("loading", false);
-        });
+      await zutils.fetchClassList((classes) => {
+        classes
+          ? (this.classes = classes)
+          : dialogs.toasts.error("获取班级列表失败");
+      });
+      this.$store.commit("loading", false);
     },
     rowClick: function (item) {
       if (this.$store.state.info.permission >= permissions.teacher)
-        this.$router.push("/class/stulist/" + item.id);
+        this.$router.push({
+          name: "classStulist",
+          params: { classid: item.id },
+        });
       else console.log("权限不足，无法跳转");
     },
   },

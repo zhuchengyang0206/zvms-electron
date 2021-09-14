@@ -6,11 +6,7 @@
         <template v-slot:activator="{ on: menu, attrs }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on: tooltip }">
-              <v-btn
-                depressed
-                v-bind="attrs"
-                v-on="{ ...tooltip, ...menu }"
-              >
+              <v-btn depressed v-bind="attrs" v-on="{ ...tooltip, ...menu }">
                 <div class="headline">{{ nowclassname }}</div>
               </v-btn>
               <div class="headline">学生列表</div>
@@ -49,9 +45,9 @@
         no-data-text="没有数据哦"
         no-results-text="没有结果"
       ></v-data-table>
-      <v-dialog v-model="dialog">
+      <v-dialog v-model="dialog" max-width="80%">
         <v-card>
-          <uservolist :userid="rowUserId" :title="rowUserName" />
+          <stuvolist :userid="rowUserId" :title="rowUserName" />
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="red darken-1" text @click="dialog = false"
@@ -68,7 +64,8 @@
 import axios from "axios";
 import dialogs from "../../utils/dialogs.js";
 import permissions from "../../utils/permissions.js";
-import uservolist from "../../compoments/uservolist";
+import stuvolist from "../../components/stuvolist";
+import zutils from "../../utils/zutils.js";
 
 export default {
   data: () => ({
@@ -85,28 +82,27 @@ export default {
     headers: [
       { text: "学号", value: "id", align: "start", sortable: true },
       { text: "姓名", value: "name" },
-      { text: "校内", value: "inside" },
-      { text: "校外", value: "outside" },
-      { text: "大型", value: "large" },
+      { text: "校内（分钟）", value: "inside" },
+      { text: "校外（分钟）", value: "outside" },
+      { text: "大型（分钟）", value: "large" },
       { text: "完成", value: "finished" },
     ],
   }),
   components: {
-    uservolist,
+    stuvolist,
   },
   mounted: function () {
     this.pageload();
   },
   methods: {
-    pageload() {
+    async pageload() {
       this.$store.commit("loading", true);
       axios
-        .post("/class/list")
+        .get("/class/list")
         .then((response) => {
-          if (response.data.type == "ERROR"){
+          if (response.data.type == "ERROR") {
             dialogs.toasts.error(response.data.message);
-          }
-          else if (response.data.type == "SUCCESS") {
+          } else if (response.data.type == "SUCCESS") {
             this.classes = response.data.class;
             this.nowclass = this.$store.state.info.class;
             this.nowclassname = this.$store.state.info.classname;
@@ -127,35 +123,27 @@ export default {
         .finally(() => {
           this.$store.commit("loading", false);
           //对团支书以上等级加入特殊判断防止报错
-          if(this.$store.state.info.permission > permissions.secretary && this.$route.params.classid <= 200000)
+          if (
+            this.$store.state.info.permission > permissions.secretary &&
+            this.$route.params.classid <= 200000
+          )
             this.nowclassname = "点击选择班级";
-          else
-            this.fetchstulist();
+          else this.fetchstulist();
         });
     },
 
-    fetchstulist: function () {
+    fetchstulist: async function () {
       this.$store.commit("loading", true);
       this.students = undefined;
-      axios
-        .post("/class/stulist/" + this.nowclass)
-        .then((response) => {
-          if (response.data.type == "ERROR")
-            dialogs.toasts.error(response.data.message);
-          else if (response.data.type == "SUCCESS") {
-            this.students = response.data.student;
-            //计算义工是否满
-            for (var i = 0; i < this.students.length; i++) {
-              this.students[i].finished = this.finished(this.students[i]);
-            }
-          } else dialogs.toasts.error("未知错误");
-        })
-        .catch((error) => {
-          dialogs.toasts.error(error);
-        })
-        .finally(() => {
-          this.$store.commit("loading", false);
-        });
+      await zutils.fetchStudentList(this.nowclass, (stus) => {
+        stus ? (this.students = stus) : (this.students = undefined);
+      });
+      this.$store.commit("loading", false);
+    },
+
+    classid2name: function (classid) {
+      for (var i = 0; i < this.classes.length; i++)
+        if (this.classes[i]["id"] == classid) return this.classes[i]["name"];
     },
 
     rowClick: function (item) {
@@ -168,31 +156,6 @@ export default {
       this.nowclass = item.id;
       this.nowclassname = item.name;
       this.fetchstulist();
-    },
-
-    finished: function (item) {
-      var inside = item["inside"];
-      var outside = item["outside"];
-      var large = item["large"];
-      var result = true;
-
-      if (outside < 20) {
-        this.inside = inside - (20 - outside) * 2;
-        outside = 20;
-      }
-      if (large < 16 || inside < 20 || outside < 20 || inside + outside < 44) {
-        result = false;
-      }
-
-      return result ? "是" : "否";
-    },
-
-    classid2name: function (classid) {
-      for (var i = 0; i < this.classes.length; i++) {
-        if (this.classes[i]["id"] == classid) {
-          return this.classes[i]["name"];
-        }
-      }
     },
   },
 };

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-//import createPersistedState from 'vuex-persistedstate'
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex);
 
@@ -9,6 +9,7 @@ export default new Vuex.Store({
     state: {
         isLogined: false,
         isLoading: false,
+        token: undefined,
         info: {
             username: undefined,
             permission: undefined,
@@ -33,7 +34,10 @@ export default new Vuex.Store({
         },
         draweritems: (state, payload) => {
             state.draweritems = payload
+        },
+        token: (state, payload) => {
+            state.token = payload
         }
     },
-    //plugins: [createPersistedState()]
+    plugins: [createPersistedState()]
 });

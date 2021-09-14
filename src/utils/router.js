@@ -1,58 +1,69 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import home from '../views/home.vue'
-import login from '../views/login.vue'
-import me from '../views/me.vue'
-import logout from '../views/logout.vue'
-import * as classes from '../views/class'
-import * as volunteer from '../views/volunteer'
-//import admin from '../views/admin.vue'
-//import about from '../views/about.vue'
-//import error404 from '../views/error404.vue'
-//import * as activity from '../views/activity'
-//import * as user from '../views/user'
-//import * as group from '../views/group'
-//import store from './store'
 
 Vue.use(Router)
 
 export default new Router({
 	routes: [
-		// 首页
 		{
 			path: '/',
 			name: 'home',
-			component: home
+			component: () => import('../views/home.vue')
 		},
 		{
 			path: '/login',
 			name: 'login',
-			component: login
+			component: () => import('../views/login.vue')
 		},
 		{
 			path: '/me',
 			name: 'me',
-			component: me
+			component: () => import('../views/me.vue')
+		},
+		{
+			path: '/modifyPwd',
+			name: 'modifyPwd',
+			component: () => import('../views/modifyPwd.vue')
 		},
 		{
 			path: '/logout',
 			name: 'logout',
-			component: logout
+			component: () => import('../views/logout.vue')
 		},
 		{
 			path: '/class/list',
 			name: 'classList',
-			component: classes.list
+			component: () => import('../views/class/list.vue')
 		},
 		{
 			path: '/class/stulist/:classid',
 			name: 'classStulist',
-			component: classes.stulist
+			component: () => import('../views/class/stulist.vue')
 		},
 		{
 			path: '/volunteer/list',
 			name: 'volunteerList',
-			component: volunteer.list
+			component: () => import('../views/volunteer/list.vue')
+		},
+		{
+			path: '/volunteer/create',
+			name: 'volunteerCreate',
+			component: () => import('../views/volunteer/create.vue')
+		},
+		{
+			path: '/volunteer/audit',
+			name: 'volunteerAudit',
+			component: () => import('../views/volunteer/audit.vue')
+		},
+		{
+			path: '/volunteer/holiday',
+			name: 'volunteerHoliday',
+			component: () => import('../views/volunteer/holiday.vue')
+		},
+		{
+			path: '/volunteer/thought',
+			name: 'volunteerThought',
+			component: () => import('../views/volunteer/thought.vue')
 		}
 	]
 })

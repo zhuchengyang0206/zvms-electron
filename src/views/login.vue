@@ -14,6 +14,8 @@
       >
       <br />
       <v-card-text>
+        <h1><a href="https://zhuchengyang.gitee.io/blog/yigong.html">公测须知</a></h1>
+        <br/>
         <v-form ref="form">
           <v-text-field
             type="username"
@@ -71,6 +73,7 @@ export default {
           .post("/user/login", {"userid":this.form.userid,"password":md5(this.form.password)})
           .then((response) => {
             //对传回数据进行处理
+            console.log(response.data)
             if (response.data.type == "SUCCESS") {
               dialogs.toasts.success(response.data.message);
               //将一切保存到$store
@@ -81,10 +84,13 @@ export default {
                 class: response.data.class,
                 classname: response.data.classname,
               });
+              //设置token
+              this.$store.commit("token", response.data.token);
               this.$router.push("/me");
               //更新抽屉导航栏
               this.drawers = [
                 { title: "我的", to: "/me", icon: "mdi-account-circle" },
+                { title: "修改密码", to: "/modifyPwd", icon: "mdi-account-circle"}
               ];
 
               //看看是否加上班级列表
@@ -103,13 +109,40 @@ export default {
                   icon: "mdi-view-list",
                 });
                 
+              }
+              this.drawers.push({
+                title: "义工列表",
+                to: "/volunteer/list",
+                icon: "mdi-view-list",
+              });
+
+              //看看是否加上创建义工
+              if (response.data.permission >= permissions.teacher) {
                 this.drawers.push({
-                  title: "义工列表",
-                  to: "/volunteer/list",
+                  title: "创建义工",
+                  to: "/volunteer/create",
                   icon: "mdi-view-list",
                 });
               }
-
+              if (response.data.permission > permissions.teacher) {
+                this.drawers.push({
+                  title: "审核感想",
+                  to: "/volunteer/audit",
+                  icon: "mdi-view-list",
+                });
+              }
+              if (response.data.permission == permissions.secretary){
+                this.drawers.push({
+                  title: "假期义工",
+                  to: "/volunteer/holiday",
+                  icon: "mdi-view-list",
+                });
+                this.drawers.push({
+                  title: "感想提交",
+                  to: "/volunteer/thought",
+                  icon: "mdi-view-list",
+                });
+              }
               this.drawers.push({
                 title: "登出",
                 to: "/logout",

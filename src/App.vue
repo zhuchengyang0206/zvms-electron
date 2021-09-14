@@ -1,41 +1,12 @@
 <template style="overflow-y: hidden;" id="win">
   <v-app
     style="
-      background: url(https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php);
+      background: url(https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fphoto.tuchong.com%2F16667757%2Ff%2F1152125355.jpg&refer=http%3A%2F%2Fphoto.tuchong.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1631932457&t=5662d318816fc73507d495f273b42ad5);
       background-size: cover;
       background-attachment: fixed;
       overflow-y: hidden;
     "
   >
-    <v-system-bar
-      app
-      window
-      color="primary"
-      dark
-      style="-webkit-app-region: drag"
-      align-center
-    >
-      <span>{{hitokoto.hitokoto}} - {{hitokoto.from}}·{{hitokoto.from_who}}</span>
-      <v-spacer></v-spacer>
-      <v-icon
-        @click="minwindow"
-        color="white"
-        style="-webkit-app-region: no-drag"
-        >mdi-window-minimize</v-icon
-      >
-      <v-icon
-        @click="maxwindow"
-        color="white"
-        style="-webkit-app-region: no-drag"
-        >mdi-window-maximize</v-icon
-      >
-      <v-icon
-        @click="closewindow"
-        color="white"
-        style="-webkit-app-region: no-drag; margin-right: 0"
-        >mdi-close</v-icon
-      >
-    </v-system-bar>
     <v-navigation-drawer
       color="primary"
       expand-on-hover
@@ -52,7 +23,7 @@
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>义工管理系统</v-list-item-title>
-            <v-list-item-subtitle>内测版</v-list-item-subtitle>
+            <v-list-item-subtitle>内测</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
@@ -102,7 +73,7 @@
       color="rgba(255,255,255,0.3)"
     >
       <v-col class="text-center" cols="12"
-        >{{ new Date().getFullYear() }} - ©mo_yi</v-col
+        >{{ new Date().getFullYear() }} - © mo_yi &amp; Zecyel &amp; fpc7519</v-col
       >
     </v-footer>
   </v-app>
@@ -122,72 +93,19 @@
 }
 </style>
 <script>
-import dialogs from "./utils/dialogs";
-import axios from "axios";
-
-const { BrowserWindow } = window.require("electron").remote;
 export default {
   name: "App",
   data: () => ({
     activeBtn: 1,
     drawer: true,
     phone: false,
-    hitokoto: {
-      hitokoto: undefined,
-      from: undefined,
-      from_who: undefined,
-    }
   }),
   mounted: function () {
-    this.getTheme();
-    this.getHitokoto();
   },
   methods: {
-    minwindow() {
-      const window = BrowserWindow.getFocusedWindow();
-      window.minimize();
-    },
-    maxwindow() {
-      const window = BrowserWindow.getFocusedWindow();
-      if (window.isMaximized()) {
-        window.restore();
-      } else {
-        window.maximize();
-      }
-    },
-    closewindow() {
-      const window = BrowserWindow.getFocusedWindow();
-      window.close();
-    },
-    getTheme() {
-      this.$store.commit("loading", true);
-      axios
-        .get("https://zvms.gitee.io/config/theme.json")
-        .then((response) => {
-          this.$vuetify.theme.themes = response.data;
-        })
-        .catch((error) => {
-          dialogs.toasts.error(error);
-        })
-        .finally(() => {this.$store.commit("loading", false);});
-    },
     changeColorTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
-    getHitokoto(){
-      this.$store.commit("loading", true);
-      axios
-        .get("https://v1.hitokoto.cn")
-        .then((response) => {
-          this.hitokoto.hitokoto = response.data.hitokoto;
-          this.hitokoto.from = response.data.from;
-          this.hitokoto.from_who = response.data.from_who;
-        })
-        .catch((error) => {
-          dialogs.toasts.error(error);
-        })
-        .finally(() => {this.$store.commit("loading", false);})
-    }
   },
 };
 </script>

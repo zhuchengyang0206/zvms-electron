@@ -23,7 +23,7 @@ export default {
         class: undefined,
         classname: undefined
       });
-      //之后这里还要做点删除cookie什么的
+      this.$store.commit("token", undefined);
       axios
         .post("/user/logout")
         .then((response) => {
