@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain } from 'electron'
 import {
     createProtocol,
     /* installVueDevtools */
@@ -76,6 +76,19 @@ function createWindow() {
     })
     win.on('hide', () => {
         //tray.setHighlightMode('never')
+    })
+    ipcMain.on('minwindow', () => {
+        win.minimize()
+    })
+    ipcMain.on('maxwindow', () => {
+        if (win.isMaximized()) {
+            win.restore()
+        } else {
+            win.maximize()
+        }
+    })
+    ipcMain.on('closewindow', () => {
+        win.hide()
     })
     //图标找不到啊草
     tray = new Tray(path.join(__static,'logo.png'));

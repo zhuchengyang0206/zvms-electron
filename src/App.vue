@@ -15,7 +15,7 @@
       style="-webkit-app-region: drag"
       align-center
     >
-      <span>{{hitokoto.hitokoto}} - {{hitokoto.from}}·{{hitokoto.from_who}}</span>
+      <!-- <span>{{hitokoto.hitokoto}} - {{hitokoto.from}}·{{hitokoto.from_who}}</span> -->
       <v-spacer></v-spacer>
       <v-icon
         @click="minwindow"
@@ -122,6 +122,7 @@
 }
 </style>
 <script>
+let { ipcRenderer } = window.require('electron')
 export default {
   name: "App",
   data: () => ({
@@ -134,6 +135,15 @@ export default {
   methods: {
     changeColorTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    },
+    minwindow() {
+      ipcRenderer.send('minwindow')
+    },
+    maxwindow() {
+      ipcRenderer.send('maxwindow')
+    },
+    closewindow() {
+      ipcRenderer.send('closewindow')
     },
   },
 };
