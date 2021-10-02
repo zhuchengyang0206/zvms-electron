@@ -238,7 +238,7 @@ export default {
             this.form.inside != parseInt(this.form.inside) || isNaN(parseInt(this.form.inside)) || parseInt(this.form.inside) <= 0 ||
             this.form.outside != parseInt(this.form.outside) || isNaN(parseInt(this.form.outside)) || parseInt(this.form.outside) <= 0 ||
             this.form.large != parseInt(this.form.large) || isNaN(parseInt(this.form.large)) || parseInt(this.form.large) <= 0) {
-                dialog.toasts.error("数据不合法");
+                dialogs.toasts.error("数据不合法");
                 return;
             }
         this.$store.commit("loading", true);
