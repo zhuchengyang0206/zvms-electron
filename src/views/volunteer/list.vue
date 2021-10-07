@@ -141,6 +141,7 @@ import volinfo from "../../components/volinfo";
 import zutils from "../../utils/zutils.js";
 import axios from "axios";
 
+let { ipcRenderer } = window.require('electron')
 export default {
   data: () => ({
     search: "",
@@ -171,6 +172,7 @@ export default {
   },
   methods: {
     pageload() {
+      ipcRenderer.send('endflash');
       this.switchDisplay();
     },
     granted: function () {
