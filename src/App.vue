@@ -122,6 +122,8 @@
 }
 </style>
 <script>
+import zutils from "./utils/zutils.js"
+
 let { ipcRenderer } = window.require('electron')
 export default {
   name: "App",
@@ -130,11 +132,21 @@ export default {
     drawer: true,
     phone: false,
   }),
-  mounted: function () {
+  mounted: async function () {
+    let vol;
+    await zutils.fetchAllVolunter((volworks) => { vol = volworks; });
+    this.listen(vol)
   },
   methods: {
     changeColorTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    },
+    async listen(last) {
+      if (!last) return;
+      let vol;
+      await zutils.fetchAllVolunter((volworks) => { vol = volworks; });
+      ipcRenderer.send(vol == last ? 'flash' : 'endflash');
+      setInterval(this.listen, 300000, vol);
     },
     minwindow() {
       ipcRenderer.send('minwindow')

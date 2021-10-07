@@ -91,7 +91,7 @@ function createWindow() {
         win.hide()
     })
     //图标找不到啊草
-    tray = new Tray(path.join(__static,'logo.png'));
+    tray = new Tray(path.join(__static,'logo.ico'));
     const contextMenu = Menu.buildFromTemplate([
         { label: 'ZVMS', click: () => { openDefaultBrowser('https://zvms.gitee.io/zvms-doc') } },
         { label: '显示', click: () => { win.show() } },
@@ -102,6 +102,21 @@ function createWindow() {
     tray.on('click', () => {
         win.isVisible() ? win.hide() : win.show()
         win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true)
+    })
+    let timericon;
+    ipcMain.on('flash', () => {
+        win.flashFrame(true);
+        let type = 0;
+        timericon = setInterval(() => {
+            tray.setImage(path.join(__static,type ? 'logo.ico' : 'empty.ico'));
+            type ^= 1;
+        },
+            500
+        );
+    })
+    ipcMain.on('endflash', () => {
+        clearInterval(timericon);
+        tray.setImage(path.join(__static,'logo.ico'));
     })
 }
 
