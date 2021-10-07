@@ -63,9 +63,5 @@
     "> 1%",
     "last 2 versions"
   ],
-  "__npminstall_done": false,
-  "nsis": {
-    "oneClick": false,
-    "allowToChangeInstallationDirectory": true
-  }
+  "__npminstall_done": false
 }
