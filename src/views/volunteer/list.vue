@@ -174,6 +174,17 @@ export default {
   },
   methods: {
     pageload() {
+	  await zutils.checkToken((flag)=>{
+	    if(!flag){
+		  axios.post("/user/logout").finally({
+		    this.$store.commit("draweritems", [
+              { title: "登录", to: "/login", icon: "mdi-account-circle" },
+            ]);
+            this.$router.push("/login");
+            this.$store.commit("loading", false);
+		  })
+		}
+	  });
       ipcRenderer.send('endflash');
       this.switchDisplay();
     },
