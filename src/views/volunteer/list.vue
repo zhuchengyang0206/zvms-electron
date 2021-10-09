@@ -4,6 +4,7 @@
       <v-card-title>
         义工列表
         <v-spacer></v-spacer>
+		<!--
         <v-switch
           color="secondary"
           label="仅显示本班"
@@ -12,6 +13,7 @@
           v-show="!granted()"
           dense
         ></v-switch>
+		-->
       </v-card-title>
     </v-card>
     <v-card v-for="vol in volworks" v-bind:key="vol.id">
@@ -249,7 +251,7 @@ export default {
       this.dialog = true;
     },
     switchDisplay: function () {
-      if (this.onlyDisplayCurrentClass) this.fetchCurrentClassVol();
+      if (granted()) this.fetchCurrentClassVol();
       else this.fetchAllVol();
     },
     async fetchCurrentClassVol() {
