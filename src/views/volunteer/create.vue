@@ -234,6 +234,13 @@ export default {
       // if (true){
         console.log("创建义工");
         console.log(this.form);
+        if (this.form.stuMax != parseInt(this.form.stuMax) || isNaN(parseInt(this.form.stuMax)) || parseInt(this.form.stuMax) <= 0 ||
+            this.form.inside != parseInt(this.form.inside) || isNaN(parseInt(this.form.inside)) || parseInt(this.form.inside) <= 0 ||
+            this.form.outside != parseInt(this.form.outside) || isNaN(parseInt(this.form.outside)) || parseInt(this.form.outside) <= 0 ||
+            this.form.large != parseInt(this.form.large) || isNaN(parseInt(this.form.large)) || parseInt(this.form.large) <= 0) {
+                dialog.toasts.error("数据不合法");
+                return;
+            }
         this.$store.commit("loading", true);
         axios
           .post("/volunteer/create", {
