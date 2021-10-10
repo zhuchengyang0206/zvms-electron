@@ -192,6 +192,8 @@ import zutils from "../../utils/zutils";
 import axios from "axios";
 import { NOTEMPTY } from "../..//utils/validation.js";
 
+let { ipcRenderer } = window.require('electron')
+
 export default {
   data: () => ({
     classSelected: [],
@@ -227,6 +229,7 @@ export default {
               { title: "登录", to: "/login", icon: "mdi-account-circle" },
             ]);
             this.$router.push("/login");
+            ipcRenderer.send("flash");
             this.$store.commit("loading", false);
 		  })
 		}
