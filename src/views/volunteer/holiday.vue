@@ -188,6 +188,8 @@ import zutils from "../../utils/zutils.js";
 import { NOTEMPTY } from "../..//utils/validation.js";
 import axios from "axios";
 
+let { ipcRenderer } = window.require('electron');
+
 export default {
   data: () => ({
     modalDate: false,
@@ -220,6 +222,7 @@ export default {
               { title: "登录", to: "/login", icon: "mdi-account-circle" },
             ]);
             this.$router.push("/login");
+            ipcRenderer.send('flash');
             this.$store.commit("loading", false);
 		  })
 		}
