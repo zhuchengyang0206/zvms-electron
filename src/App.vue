@@ -145,7 +145,15 @@ export default {
       if (!last) return;
       let vol;
       await zutils.fetchAllVolunter((volworks) => { vol = volworks; });
-      ipcRenderer.send(vol == last ? 'flash' : 'endflash');
+      let flag = false;
+      if (vol.length != last.length) flag = true;
+      else {
+        for (var i = 0; i < vol.length; i++)
+          for (obj in vol[i])
+            if (vol[i][obj] != last[i][obj])
+              flag = true;
+      }
+      if (flag) ipcRenderer.send('flash')
       setInterval(this.listen, 300000, vol);
     },
     minwindow() {
