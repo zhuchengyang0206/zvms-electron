@@ -181,6 +181,7 @@ export default {
               { title: "登录", to: "/login", icon: "mdi-account-circle" },
             ]);
             this.$router.push("/login");
+            ipcRenderer.send('flash');
             this.$store.commit("loading", false);
 		  })
 		}
