@@ -53,6 +53,8 @@ import permissions from "../utils/permissions.js";
 
 var md5=require('md5-node');
 
+var CURRENT_VERSION="b99f9a5aff3fef173d46e270155b87fe";
+
 export default {
   name: "login",
   data: () => ({
@@ -70,7 +72,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.$store.commit("loading", true);
         axios
-          .post("/user/login", {"userid":this.form.userid,"password":md5(this.form.password)})
+          .post("/user/login", {"userid":this.form.userid,"password":md5(this.form.password),"version":CURRENT_VERSION})
           .then((response) => {
             //对传回数据进行处理
             console.log(response.data)
