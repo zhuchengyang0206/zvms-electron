@@ -149,7 +149,7 @@ export default {
       if (vol.length != last.length) flag = true;
       else {
         for (var i = 0; i < vol.length; i++)
-          for (obj in vol[i])
+          for (var obj in vol[i])
             if (vol[i][obj] != last[i][obj])
               flag = true;
       }
