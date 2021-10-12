@@ -35,7 +35,8 @@ axios.interceptors.request.use(
 
 router.beforeEach((to, from, next) => {
 	NProgress.start();
-	if (to.path != '/login') {
+	if (to.path == '/report') next();
+	else if (to.path != '/login') {
 		if (store.state.token) {
 			next();
 		} else {

@@ -31,6 +31,11 @@ export default new Router({
 			component: () => import('../views/logout.vue')
 		},
 		{
+			path: '/report',
+			name: 'report',
+			component: () => import('../views/report.vue')
+		},
+		{
 			path: '/class/list',
 			name: 'classList',
 			component: () => import('../views/class/list.vue')
