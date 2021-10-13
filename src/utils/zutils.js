@@ -1,6 +1,17 @@
 import Axios from "axios"
 
 export default {
+	checkToken: async (callback) => {
+		await Axios
+			.post("/user/info")
+			.then((response) => {
+				callback(true);
+			})
+			.catch((err) => {
+				callback(false);
+			})
+	},
+	
     fetchClassList: async (callback) => {
         await Axios
             .get("/class/list")

@@ -129,6 +129,9 @@
 import dialogs from "../../utils/dialogs.js";
 import permissions from "../../utils/permissions";
 import axios from "axios";
+import zutils from "../../utils/zutils.js";
+
+let { ipcRenderer } = window.require('electron');
 
 export default {
   data: () => ({
@@ -157,6 +160,18 @@ export default {
   },
   methods: {
     async pageload() {
+	  await zutils.checkToken((flag)=>{
+	    if(!flag){
+		  axios.post("/user/logout").finally({
+		    this.$store.commit("draweritems", [
+              { title: "登录", to: "/login", icon: "mdi-account-circle" },
+            ]);
+            this.$router.push("/login");
+            ipcRenderer.send("flash");
+            this.$store.commit("loading", false);
+		  })
+		}
+	  });
       this.$store.commit("loading", true);
       await axios
         .get("/volunteer/unaudited",{

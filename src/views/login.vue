@@ -50,6 +50,8 @@ import axios from "axios"; //ajax网络库
 import permissions from "../utils/permissions.js";
 
 var md5=require('md5-node');
+var current_version = "b99f9a5aff3fef173d46e270155b87fe";
+// 版本号的加盐的MD5，记得改
 
 var CURRENT_VERSION="b99f9a5aff3fef173d46e270155b87fe";
 
@@ -70,7 +72,11 @@ export default {
       if (this.$refs.form.validate()) {
         this.$store.commit("loading", true);
         axios
-          .post("/user/login", {"userid":this.form.userid,"password":md5(this.form.password),"version":CURRENT_VERSION})
+          .post("/user/login", {
+		    "userid": this.form.userid,
+			"password": md5(this.form.password),
+			"version": current_version
+		  })
           .then((response) => {
             //对传回数据进行处理
             console.log(response.data)

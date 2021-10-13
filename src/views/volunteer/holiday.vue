@@ -188,6 +188,8 @@ import zutils from "../../utils/zutils.js";
 import { NOTEMPTY } from "../..//utils/validation.js";
 import axios from "axios";
 
+let { ipcRenderer } = window.require('electron');
+
 export default {
   data: () => ({
     modalDate: false,
@@ -213,6 +215,18 @@ export default {
   },
   methods: {
     async pageload() {
+	  await zutils.checkToken((flag)=>{
+	    if(!flag){
+		  axios.post("/user/logout").finally({
+		    this.$store.commit("draweritems", [
+              { title: "登录", to: "/login", icon: "mdi-account-circle" },
+            ]);
+            this.$router.push("/login");
+            ipcRenderer.send('flash');
+            this.$store.commit("loading", false);
+		  })
+		}
+	  });
       this.$store.commit("loading", true);
       await zutils.fetchStudentList(this.$store.state.info.class, (stulst) => {
         stulst
