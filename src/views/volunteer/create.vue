@@ -192,8 +192,6 @@ import zutils from "../../utils/zutils";
 import axios from "axios";
 import { NOTEMPTY } from "../..//utils/validation.js";
 
-let { ipcRenderer } = window.require('electron')
-
 export default {
   data: () => ({
     classSelected: [],
@@ -222,18 +220,8 @@ export default {
   },
   methods: {
     async pageload() {
-	  await zutils.checkToken((flag)=>{
-	    if(!flag){
-		  axios.post("/user/logout").finally({
-		    this.$store.commit("draweritems", [
-              { title: "登录", to: "/login", icon: "mdi-account-circle" },
-            ]);
-            this.$router.push("/login");
-            ipcRenderer.send("flash");
-            this.$store.commit("loading", false);
-		  })
-		}
-	  });
+      this.$store.commit("loading", true);
+      await zutils.checkToken();
       await zutils.fetchClassList((classes) => {
         classes
           ? (this.classes = classes)

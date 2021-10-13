@@ -39,6 +39,7 @@
 <script>
 import dialogs from "../utils/dialogs";
 import axios from "axios";
+import zutils from "../utils/zutils";
 
 var md5=require('md5-node');
 export default {
@@ -52,7 +53,7 @@ export default {
   },
   methods: {
     pageload: function(){
-      
+      zutils.checkToken();
     },
     modifyPwd: function(){
       if (this.pwd_new != this.pwd_conf){

@@ -1,17 +1,23 @@
 import Axios from "axios"
 
+let { ipcRenderer } = window.require('electron');
+
 export default {
-	checkToken: async (callback) => {
-		await Axios
-			.post("/user/info")
-			.then((response) => {
-				callback(true);
-			})
-			.catch((err) => {
-				callback(false);
-			})
-	},
-	
+    checkToken: async () => {
+        await Axios
+            .post("/user/info").catch(() => {
+              Axios.post("/user/logout").finally(() => {
+                this.$store.commit("draweritems", [
+                  { title: '登录', to: '/login', icon: 'mdi-account-circle' },
+                  { title: "反馈错误", to: "/report", icon: "mdi-alert" }
+                ]);
+                this.$store.state.token = undefined;
+                ipcRenderer.send('flash');
+                this.$store.commit("loading", false);
+              })
+            })
+    },
+    
     fetchClassList: async (callback) => {
         await Axios
             .get("/class/list")
@@ -31,10 +37,10 @@ export default {
                 let stus = response.data.student
                 if (stus)
                     for (var i = 0; i < stus.length; i++) {
-						// 义工时间上限；2021届以后有变动
-						var vim=24,vom=20,vlm=16;
-						if(stus[i]["id"]>20210000){ vim=30;vom=16;vlm=18; }
-						
+                        // 义工时间上限；2021届以后有变动
+                        var vim=24,vom=20,vlm=16;
+                        if(stus[i]["id"]>20210000){ vim=30;vom=16;vlm=18; }
+                        
                         var inside = stus[i]["inside"]/60.0;
                         var outside = stus[i]["outside"]/60.0;
                         var large = stus[i]["large"]/60.0;
