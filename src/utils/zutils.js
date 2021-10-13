@@ -4,6 +4,7 @@ let { ipcRenderer } = window.require('electron');
 
 export default {
     checkToken: async () => {
+        console.log("233333");
         await Axios
             .post("/user/info").catch(() => {
               Axios.post("/user/logout").finally(() => {
