@@ -17,7 +17,8 @@ export default new Vuex.Store({
             classname: undefined
         },
         draweritems: [
-            { title: '登录', to: '/login', icon: 'mdi-account-circle' }
+            { title: '登录', to: '/login', icon: 'mdi-account-circle' },
+            { title: "反馈错误", to: "/report", icon: "mdi-alert" }
         ]
     },
 

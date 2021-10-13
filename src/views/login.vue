@@ -14,8 +14,6 @@
       >
       <br />
       <v-card-text>
-        <h1><a href="https://zhuchengyang.gitee.io/blog/yigong.html">公测须知</a></h1>
-        <br/>
         <v-form ref="form">
           <v-text-field
             type="username"
@@ -54,6 +52,8 @@ import permissions from "../utils/permissions.js";
 var md5=require('md5-node');
 var current_version = "b99f9a5aff3fef173d46e270155b87fe";
 // 版本号的加盐的MD5，记得改
+
+var CURRENT_VERSION="b99f9a5aff3fef173d46e270155b87fe";
 
 export default {
   name: "login",
@@ -153,6 +153,11 @@ export default {
                 title: "登出",
                 to: "/logout",
                 icon: "mdi-exit-to-app",
+              });
+              this.drawers.push({
+                title: "反馈错误",
+                to: "/report",
+                icon: "mdi-alert",
               });
               this.$store.commit("draweritems", this.drawers);
             } else if (response.data.type == "ERROR") {

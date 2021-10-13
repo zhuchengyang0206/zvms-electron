@@ -142,10 +142,19 @@ export default {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
     async listen(last) {
-      if (!last) return;
       let vol;
       await zutils.fetchAllVolunter((volworks) => { vol = volworks; });
-      ipcRenderer.send(vol == last ? 'flash' : 'endflash');
+      let flag = false;
+      if (last) {
+        if (vol.length != last.length) flag = true;
+        else {
+          for (var i = 0; i < vol.length; i++)
+            for (var obj in vol[i])
+              if (vol[i][obj] != last[i][obj])
+                flag = true;
+        }
+        if (flag) ipcRenderer.send('flash');
+      }
       setInterval(this.listen, 300000, vol);
     },
     minwindow() {

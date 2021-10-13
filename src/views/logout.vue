@@ -39,6 +39,7 @@ export default {
         .finally(() => {
           this.$store.commit("draweritems", [
             { title: "登录", to: "/login", icon: "mdi-account-circle" },
+            { title: "反馈错误", to: "/report", icon: "mdi-alert" }
           ]);
           this.$router.push("/login");
           this.$store.commit("loading", false);
