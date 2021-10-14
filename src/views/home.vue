@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import zutils from "../../utils/zutils.js";
+import zutils from "../utils/zutils.js";
 export default {
   name: "home",
   mounted: function () {
