@@ -166,7 +166,7 @@ export default {
             return mi + "分钟";
     },
     async pageload() {
-      await zutils.checkToken();
+      await zutils.checkToken(this.$store);
       this.$store.commit("loading", true);
       await axios
         .get("/volunteer/unaudited",{

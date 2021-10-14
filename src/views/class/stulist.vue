@@ -97,7 +97,7 @@ export default {
   methods: {
     async pageload() {
       this.$store.commit("loading", true);
-      await zutils.checkToken();
+      await zutils.checkToken(this.$store);
       axios
         .get("/class/list")
         .then((response) => {

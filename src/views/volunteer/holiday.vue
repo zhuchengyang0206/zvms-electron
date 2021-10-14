@@ -214,7 +214,7 @@ export default {
   methods: {
     async pageload() {
       this.$store.commit("loading", true);
-      await zutils.checkToken();
+      await zutils.checkToken(this.$store);
       await zutils.fetchStudentList(this.$store.state.info.class, (stulst) => {
         stulst
           ? (this.stulst = stulst)

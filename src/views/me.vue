@@ -63,8 +63,8 @@ export default {
     // this.randomThought();
   },
   methods: {
-    pageload: function () {
-      zutils.checkToken();
+    pageload: async function () {
+      await zutils.checkToken(this.$store);
     },
     initChips: function () {
       this.chips = [

@@ -5,21 +5,18 @@
       <v-card-text>
         <v-text-field
           v-model="pwd_old"
-          :rules="rules"
           label="旧密码"
           type="password"
           prepend-icon="mdi-view-list"
         />
         <v-text-field
           v-model="pwd_new"
-          :rules="rules"
           label="新密码"
           type="password"
           prepend-icon="mdi-view-list"
         />
         <v-text-field
           v-model="pwd_conf"
-          :rules="rules"
           label="确认密码"
           type="password"
           prepend-icon="mdi-view-list"
@@ -52,8 +49,8 @@ export default {
     this.pageload();
   },
   methods: {
-    pageload: function(){
-      zutils.checkToken();
+    pageload: async function(){
+      await zutils.checkToken(this.$store);
     },
     modifyPwd: function(){
       if (this.pwd_new != this.pwd_conf){

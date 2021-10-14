@@ -163,8 +163,8 @@ export default {
     this.pageload();
   },
   methods: {
-    pageload() {
-      zutils.checkToken();
+    async pageload() {
+      await zutils.checkToken(this.$store);
       ipcRenderer.send('endflash');
       this.switchDisplay();
     },
