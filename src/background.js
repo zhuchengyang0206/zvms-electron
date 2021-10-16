@@ -105,6 +105,7 @@ function createWindow() {
     })
     let timericon;
     ipcMain.on('flash', () => {
+        if (timericon) return;
         win.flashFrame(true);
         let type = 0;
         timericon = setInterval(() => {
@@ -115,7 +116,9 @@ function createWindow() {
         );
     })
     ipcMain.on('endflash', () => {
+        if (!timericon) return;
         clearInterval(timericon);
+        timericon = undefined;
         tray.setImage(path.join(__static,'logo.ico'));
     })
 }
