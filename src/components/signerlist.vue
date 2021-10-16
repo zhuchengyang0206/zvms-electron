@@ -18,16 +18,16 @@
           <td>{{ vol.time }}</td>
         </tr>
         <tr>
-          <td>校内时长（单位：分钟）</td>
-          <td>{{ vol.inside }}</td>
+          <td>校内时长</td>
+          <td>{{ timeToHint(vol.inside) }}</td>
         </tr>
         <tr>
-          <td>校外时长（单位：分钟）</td>
-          <td>{{ vol.outside }}</td>
+          <td>校外时长</td>
+          <td>{{ timeToHint(vol.outside) }}</td>
         </tr>
         <tr>
-          <td>大型时长（单位：分钟）</td>
-          <td>{{ vol.large }}</td>
+          <td>大型时长</td>
+          <td>{{ timeToHint(vol.large) }}</td>
         </tr>
         <tr>
           <td>人数</td>
@@ -73,6 +73,14 @@ export default {
     this.init();
   },
   methods: {
+    timeToHint: function (a){
+        let hr = parseInt(a / 60);
+        let mi = a % 60;
+        if (hr != 0)
+            return hr + " 小时 " + mi + " 分钟";
+        else
+            return mi + "分钟";
+    },
     init: function () {
       if (this.volid != 0 && this.volid != undefined) {
         this.$store.commit("loading", true);

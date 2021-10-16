@@ -3,18 +3,21 @@ import Axios from "axios"
 let { ipcRenderer } = window.require('electron');
 
 export default {
-    checkToken: async (store) => {
+    checkToken: async (con) => {
         await Axios
-            .get("/user/info").catch(() => {
-              Axios.post("/user/logout").finally(() => {
-                store.commit("draweritems", [
-                  { title: '登录', to: '/login', icon: 'mdi-account-circle' },
-                  { title: "反馈错误", to: "/report", icon: "mdi-alert" }
-                ]);
-                store.state.token = undefined;
-                ipcRenderer.send('flash');
-                store.commit("loading", false);
-              })
+            .post("/user/info").then((msg) => {
+              if (msg["data"]["type"] != "SUCCESS") {
+                Axios.post("/user/logout").finally(() => {
+                  con.$store.commit("draweritems", [
+                    { title: '登录', to: '/login', icon: 'mdi-account-circle' },
+                    { title: "反馈错误", to: "/report", icon: "mdi-alert" }
+                  ]);
+                  con.$store.state.token = undefined;
+                  ipcRenderer.send('flash');
+                  con.$store.commit("loading", false);
+                  con.$router.push("/login");
+                })
+              }
             })
     },
     

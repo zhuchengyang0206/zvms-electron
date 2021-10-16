@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     pageload: async function(){
-      await zutils.checkToken(this.$store);
+      await zutils.checkToken(this);
     },
     modifyPwd: function(){
       if (this.pwd_new != this.pwd_conf){

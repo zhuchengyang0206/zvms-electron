@@ -164,7 +164,7 @@ export default {
   },
   methods: {
     async pageload() {
-      await zutils.checkToken(this.$store);
+      await zutils.checkToken(this);
       ipcRenderer.send('endflash');
       this.switchDisplay();
     },

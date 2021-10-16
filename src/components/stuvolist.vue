@@ -66,6 +66,14 @@ export default {
     this.init();
   },
   methods: {
+    timeToHint: function (a){
+        let hr = parseInt(a / 60);
+        let mi = a % 60;
+        if (hr != 0)
+            return hr + " 小时 " + mi + " 分钟";
+        else
+            return mi + "分钟";
+    },
     init: function () {
       this.volworks = undefined;
       if (this.userid != 0 && this.userid != undefined) {
@@ -77,6 +85,11 @@ export default {
               dialogs.toasts.error(response.data.message);
             else if (response.data.type == "SUCCESS") {
               this.volworks = response.data.rec;
+              for (let i in this.volworks){
+                this.volworks[i].inside = this.timeToHint(this.volworks[i].inside);
+                this.volworks[i].outside = this.timeToHint(this.volworks[i].outside);
+                this.volworks[i].large = this.timeToHint(this.volworks[i].large);
+              }
             } else dialogs.toasts.error("未知错误");
           })
           .catch((error) => {

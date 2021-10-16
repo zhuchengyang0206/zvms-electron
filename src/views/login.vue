@@ -49,6 +49,8 @@ import { NOTEMPTY } from "../utils/validation.js"; //校验表单完整性
 import axios from "axios"; //ajax网络库
 import permissions from "../utils/permissions.js";
 
+let { ipcRenderer } = window.require('electron')
+
 var md5=require('md5-node');
 var current_version = "7659efa34712b560a174dd090b605c1c";
 // 版本号的加盐的MD5，记得改
@@ -79,6 +81,7 @@ export default {
             //对传回数据进行处理
             console.log(response.data)
             if (response.data.type == "SUCCESS") {
+                ipcRenderer.send('endflash');
               dialogs.toasts.success(response.data.message);
               //将一切保存到$store
               this.$store.commit("login", true);

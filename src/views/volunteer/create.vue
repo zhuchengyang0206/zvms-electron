@@ -221,7 +221,7 @@ export default {
   methods: {
     async pageload() {
       this.$store.commit("loading", true);
-      await zutils.checkToken(this.$store);
+      await zutils.checkToken(this);
       await zutils.fetchClassList((classes) => {
         classes
           ? (this.classes = classes)
