@@ -131,31 +131,33 @@ export default {
     activeBtn: 1,
     drawer: true,
     phone: false,
+    vol: undefined
   }),
   mounted: async function () {
-    let vol;
-    await zutils.fetchAllVolunter((volworks) => { vol = volworks; });
-    this.listen(vol)
+    await zutils.fetchAllVolunter((volworks) => { this.vol = volworks; });
+    setInterval(this.listen, 30000, this);
+	console.log("mounted");
   },
   methods: {
     changeColorTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
-    async listen(last) {
+    async listen(t) {
+      console.log("listen");
+      zutils.checkToken(t);
       let vol;
       await zutils.fetchAllVolunter((volworks) => { vol = volworks; });
       let flag = false;
-      if (last) {
+      let last = t.vol;
+      if (last && vol) {
         if (vol.length != last.length) flag = true;
         else {
           for (var i = 0; i < vol.length; i++)
-            for (var obj in vol[i])
-              if (vol[i][obj] != last[i][obj])
-                flag = true;
+            if (vol[i]["id"] != last[i]["id"])
+              flag = true;
         }
         if (flag) ipcRenderer.send('flash');
       }
-      setInterval(this.listen, 300000, vol);
     },
     minwindow() {
       ipcRenderer.send('minwindow')

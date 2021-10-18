@@ -15,7 +15,7 @@ export default {
                   con.$store.state.token = undefined;
                   ipcRenderer.send('flash');
                   con.$store.commit("loading", false);
-                  con.$router.push("/login");
+                  con.$router.push("/login").catch(()=>{});
                 })
               }
             })
