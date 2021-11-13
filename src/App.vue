@@ -52,7 +52,7 @@
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>义工管理系统</v-list-item-title>
-            <v-list-item-subtitle>v1.2.1</v-list-item-subtitle>
+            <v-list-item-subtitle>v1.2.2</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
@@ -131,24 +131,56 @@ export default {
     activeBtn: 1,
     drawer: true,
     phone: false,
-    vol: undefined
+    currentVol: undefined
   }),
   mounted: async function () {
     await zutils.fetchAllVolunter((volworks) => { this.vol = volworks; });
-    setInterval(this.listen, 30000, this);
-	console.log("mounted");
+    setInterval(this.listen, 300000, this);
+	  console.log("mounted");
   },
   methods: {
+    granted: function () {
+      return this.$store.state.info.permission < permissions.teacher;
+    },
     changeColorTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
+    fetchVol: function () {
+       if (this.granted()) this.fetchCurrentClassVol();
+       else this.fetchAllVol();
+    },
+    async fetchCurrentClassVol() {
+      this.$store.commit("loading", true);
+      await zutils.fetchClassVolunter(
+        this.$store.state.info.class,
+        (volworks) => {
+          volworks
+            ? (this.currentVol = volworks)
+            : dialogs.toasts.error("获取义工列表失败");
+        }
+      );
+      this.$store.commit("loading", false);
+    },
+    async fetchAllVol() {
+      this.$store.commit("loading", true);
+      await zutils.fetchAllVolunter((volworks) => {
+        volworks
+          ? (this.currentVol = volworks)
+          : dialogs.toasts.error("获取义工列表失败");
+      });
+      this.$store.commit("loading", false);
+    },
     async listen(t) {
       console.log("listen");
+      if (!t.$store.isLogined){
+        ipcRenderer.send('flash');
+        return;
+      }
       zutils.checkToken(t);
-      let vol;
-      await zutils.fetchAllVolunter((volworks) => { vol = volworks; });
+      await fetchVol();
       let flag = false;
-      let last = t.vol;
+      let last = t.$store.lastSeenVol;
+      let vol = t.currentVol;
       if (last && vol) {
         if (vol.length != last.length) flag = true;
         else {
