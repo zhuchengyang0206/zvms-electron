@@ -52,7 +52,7 @@
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>义工管理系统</v-list-item-title>
-            <v-list-item-subtitle>内测</v-list-item-subtitle>
+            <v-list-item-subtitle>v1.2.1</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
@@ -102,7 +102,7 @@
       color="rgba(255,255,255,0.3)"
     >
       <v-col class="text-center" cols="12"
-        >{{ new Date().getFullYear() }} - © mo_yi &amp; Zecyel &amp; fpc7519</v-col
+        >{{ new Date().getFullYear() }} - © mo_yi &amp; Zecyel &amp; fpc5719</v-col
       >
     </v-footer>
   </v-app>
@@ -131,22 +131,33 @@ export default {
     activeBtn: 1,
     drawer: true,
     phone: false,
+    vol: undefined
   }),
   mounted: async function () {
-    let vol;
-    await zutils.fetchAllVolunter((volworks) => { vol = volworks; });
-    this.listen(vol)
+    await zutils.fetchAllVolunter((volworks) => { this.vol = volworks; });
+    setInterval(this.listen, 30000, this);
+	console.log("mounted");
   },
   methods: {
     changeColorTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
-    async listen(last) {
-      if (!last) return;
+    async listen(t) {
+      console.log("listen");
+      zutils.checkToken(t);
       let vol;
       await zutils.fetchAllVolunter((volworks) => { vol = volworks; });
-      ipcRenderer.send(vol == last ? 'flash' : 'endflash');
-      setInterval(this.listen, 300000, vol);
+      let flag = false;
+      let last = t.vol;
+      if (last && vol) {
+        if (vol.length != last.length) flag = true;
+        else {
+          for (var i = 0; i < vol.length; i++)
+            if (vol[i]["id"] != last[i]["id"])
+              flag = true;
+        }
+        if (flag) ipcRenderer.send('flash');
+      }
     },
     minwindow() {
       ipcRenderer.send('minwindow')

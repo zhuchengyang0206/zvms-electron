@@ -91,6 +91,7 @@
 import dialogs from "../../utils/dialogs.js";
 import permissions from "../../utils/permissions";
 import axios from "axios";
+import zutils from "../../utils/zutils";
 
 export default {
   data: () => ({
@@ -117,6 +118,7 @@ export default {
   methods: {
     async pageload() {
       this.$store.commit("loading", true);
+      await zutils.checkToken(this);
       await axios
         .get("/class/noThought/"+this.$store.state.info.class,{
 

@@ -4,14 +4,6 @@
       <v-card-title>
         义工列表
         <v-spacer></v-spacer>
-        <v-switch
-          color="secondary"
-          label="仅显示本班"
-          @click="switchDisplay()"
-          v-model="onlyDisplayCurrentClass"
-          v-show="!granted()"
-          dense
-        ></v-switch>
       </v-card-title>
     </v-card>
     <v-card v-for="vol in volworks" v-bind:key="vol.id">
@@ -171,7 +163,8 @@ export default {
     this.pageload();
   },
   methods: {
-    pageload() {
+    async pageload() {
+      await zutils.checkToken(this);
       ipcRenderer.send('endflash');
       this.switchDisplay();
     },
@@ -249,8 +242,8 @@ export default {
       this.dialog = true;
     },
     switchDisplay: function () {
-      if (this.onlyDisplayCurrentClass) this.fetchCurrentClassVol();
-      else this.fetchAllVol();
+       if (this.granted()) this.fetchCurrentClassVol();
+       else this.fetchAllVol();
     },
     async fetchCurrentClassVol() {
       this.$store.commit("loading", true);

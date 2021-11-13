@@ -32,6 +32,7 @@
 import dialogs from "../../utils/dialogs";
 import zutils from "../../utils/zutils";
 import permissions from "../../utils/permissions";
+// import axios from "axios";
 
 export default {
   data: () => ({
@@ -48,6 +49,7 @@ export default {
   methods: {
     async pageload() {
       this.$store.commit("loading", true);
+      await zutils.checkToken(this);
       await zutils.fetchClassList((classes) => {
         classes
           ? (this.classes = classes)

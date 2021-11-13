@@ -48,16 +48,16 @@
               <td>{{volDesc}}</td>
             </tr>
             <tr>
-              <td>校内时长（分钟）</td>
-              <td>{{volTI}}</td>
+              <td>校内时长</td>
+              <td>{{ timeToHint(volTI) }}</td>
             </tr>
             <tr>
-              <td>校外时长（分钟）</td>
-              <td>{{volTO}}</td>
+              <td>校外时长</td>
+              <td>{{ timeToHint(volTO) }}</td>
             </tr>
             <tr>
-              <td>大型时长（分钟）</td>
-              <td>{{volTL}}</td>
+              <td>大型时长</td>
+              <td>{{ timeToHint(volTL) }}</td>
             </tr>
             <tr>
               <td>学号</td>
@@ -129,6 +129,7 @@
 import dialogs from "../../utils/dialogs.js";
 import permissions from "../../utils/permissions";
 import axios from "axios";
+import zutils from "../../utils/zutils.js";
 
 export default {
   data: () => ({
@@ -156,7 +157,16 @@ export default {
     this.pageload();
   },
   methods: {
+    timeToHint: function (a){
+        let hr = parseInt(a / 60);
+        let mi = a % 60;
+        if (hr != 0)
+            return hr + " 小时 " + mi + " 分钟";
+        else
+            return mi + "分钟";
+    },
     async pageload() {
+      await zutils.checkToken(this);
       this.$store.commit("loading", true);
       await axios
         .get("/volunteer/unaudited",{

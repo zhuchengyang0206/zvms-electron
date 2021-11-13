@@ -14,8 +14,6 @@
       >
       <br />
       <v-card-text>
-        <h1><a href="https://zhuchengyang.gitee.io/blog/yigong.html">公测须知</a></h1>
-        <br/>
         <v-form ref="form">
           <v-text-field
             type="username"
@@ -51,7 +49,11 @@ import { NOTEMPTY } from "../utils/validation.js"; //校验表单完整性
 import axios from "axios"; //ajax网络库
 import permissions from "../utils/permissions.js";
 
+let { ipcRenderer } = window.require('electron')
+
 var md5=require('md5-node');
+var current_version = "7659efa34712b560a174dd090b605c1c";
+// 版本号的加盐的MD5，记得改
 
 export default {
   name: "login",
@@ -70,11 +72,16 @@ export default {
       if (this.$refs.form.validate()) {
         this.$store.commit("loading", true);
         axios
-          .post("/user/login", {"userid":this.form.userid,"password":md5(this.form.password)})
+          .post("/user/login", {
+            "userid": this.form.userid,
+            "password": md5(this.form.password),
+            "version": current_version
+          })
           .then((response) => {
             //对传回数据进行处理
             console.log(response.data)
             if (response.data.type == "SUCCESS") {
+                ipcRenderer.send('endflash');
               dialogs.toasts.success(response.data.message);
               //将一切保存到$store
               this.$store.commit("login", true);
@@ -147,6 +154,11 @@ export default {
                 title: "登出",
                 to: "/logout",
                 icon: "mdi-exit-to-app",
+              });
+              this.drawers.push({
+                title: "反馈错误",
+                to: "/report",
+                icon: "mdi-alert",
               });
               this.$store.commit("draweritems", this.drawers);
             } else if (response.data.type == "ERROR") {

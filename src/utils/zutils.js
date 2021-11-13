@@ -1,6 +1,26 @@
 import Axios from "axios"
 
+let { ipcRenderer } = window.require('electron');
+
 export default {
+    checkToken: async (con) => {
+        await Axios
+            .post("/user/info").then((msg) => {
+              if (msg["data"]["type"] != "SUCCESS") {
+                Axios.post("/user/logout").finally(() => {
+                  con.$store.commit("draweritems", [
+                    { title: '登录', to: '/login', icon: 'mdi-account-circle' },
+                    { title: "反馈错误", to: "/report", icon: "mdi-alert" }
+                  ]);
+                  con.$store.state.token = undefined;
+                  ipcRenderer.send('flash');
+                  con.$store.commit("loading", false);
+                  con.$router.push("/login").catch(()=>{});
+                })
+              }
+            })
+    },
+    
     fetchClassList: async (callback) => {
         await Axios
             .get("/class/list")
@@ -20,15 +40,19 @@ export default {
                 let stus = response.data.student
                 if (stus)
                     for (var i = 0; i < stus.length; i++) {
+                        // 义工时间上限；2021届以后有变动
+                        var vim=24,vom=20,vlm=16;
+                        if(stus[i]["id"]>20210000){ vim=30;vom=16;vlm=18; }
+                        
                         var inside = stus[i]["inside"]/60.0;
                         var outside = stus[i]["outside"]/60.0;
                         var large = stus[i]["large"]/60.0;
                         var result = true;
-                        if (outside < 20) {
-                            inside = inside - (20 - outside) * 2;
-                            outside = 20;
+                        if (outside < vom) { // 溢出判满机制：校内除二当校外
+                            inside = inside - (vom - outside) * 2;
+                            outside = vom;
                         }
-                        if (large < 16 || inside < 20 || outside < 20 || inside + outside < 44) {
+                        if (large < vlm || inside < vim || outside < vom || inside + outside < vim+vom) {
                             result = false;
                         }
                         result ? stus[i].finished = "是" : stus[i].finished = "否"

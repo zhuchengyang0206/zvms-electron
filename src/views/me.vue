@@ -12,9 +12,6 @@
         </v-card-text>
       </v-card-title>
     </v-card>
-    <v-card color="dark">
-      <h1><a href="https://zhuchengyang.gitee.io/blog/yigong.html">公测须知</a></h1>
-    </v-card>
     <!-- <v-card dark color="primary">
       <v-card-title>
         <v-icon left>mdi-message</v-icon>
@@ -49,6 +46,7 @@
 import axios from "axios";
 import dialogs from "../utils/dialogs";
 import permissions from "../utils/permissions";
+import zutils from "../utils/zutils";
 
 export default {
   name: "me",
@@ -65,6 +63,9 @@ export default {
     // this.randomThought();
   },
   methods: {
+    pageload: async function () {
+      await zutils.checkToken(this.$store);
+    },
     initChips: function () {
       this.chips = [
         {
