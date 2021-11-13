@@ -143,15 +143,15 @@ export default {
     ],
     volworks: [],
     dialog: false,
-      dialog_participant: false,
+    dialog_participant: false,
     dialog1: false,
-      submitThoughtDialog: false,
+    submitThoughtDialog: false,
     volid: undefined,
     onlyDisplayCurrentClass: true,
     stulst: undefined,
     stulstSelected: [],
     stu_new: undefined,
-      participantsLst: [],
+    participantsLst: [],
     stu: undefined,
     thought: undefined,
     mp: {}
@@ -166,7 +166,8 @@ export default {
     async pageload() {
       await zutils.checkToken(this);
       ipcRenderer.send('endflash');
-      this.switchDisplay();
+      await this.fetchVol();
+      this.$store.lastSeenVol = this.volworks;
     },
     granted: function () {
       return this.$store.state.info.permission < permissions.teacher;
@@ -241,7 +242,7 @@ export default {
       this.volid = volid;
       this.dialog = true;
     },
-    switchDisplay: function () {
+    fetchVol: function () {
        if (this.granted()) this.fetchCurrentClassVol();
        else this.fetchAllVol();
     },
