@@ -123,6 +123,8 @@
 </style>
 <script>
 import zutils from "./utils/zutils.js"
+import dialogs from "./utils/dialogs.js";
+import permissions from "./utils/permissions.js";
 
 let { ipcRenderer } = window.require('electron')
 export default {
@@ -136,7 +138,7 @@ export default {
   mounted: async function () {
     await zutils.fetchAllVolunter((volworks) => { this.vol = volworks; });
     setInterval(this.listen, 300000, this);
-	  console.log("mounted");
+      console.log("mounted");
   },
   methods: {
     granted: function () {
@@ -177,7 +179,7 @@ export default {
         return;
       }
       zutils.checkToken(t);
-      await fetchVol();
+      await zutils.fetchVol();
       let flag = false;
       let last = t.$store.lastSeenVol;
       let vol = t.currentVol;
