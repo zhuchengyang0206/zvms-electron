@@ -1,4 +1,5 @@
 import Axios from "axios"
+import storeSaver from "./storeSaver.js";
 
 let { ipcRenderer } = window.require('electron');
 
@@ -12,9 +13,12 @@ export default {
                     { title: '登录', to: '/login', icon: 'mdi-account-circle' },
                     { title: "反馈错误", to: "/report", icon: "mdi-alert" }
                   ]);
-                  con.$store.state.token = undefined;
                   ipcRenderer.send('flash');
+                  con.$store.commit("token",undefined);
+                  con.$store.commit("login", false);
                   con.$store.commit("loading", false);
+                  con.$store.commit("lastSeenVol", []);
+                  storeSaver.saveState(con);
                   con.$router.push("/login").catch(()=>{});
                 })
               }

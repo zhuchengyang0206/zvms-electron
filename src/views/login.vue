@@ -52,7 +52,7 @@ import permissions from "../utils/permissions.js";
 let { ipcRenderer } = window.require('electron')
 
 var md5=require('md5-node');
-var current_version = "7659efa34712b560a174dd090b605c1c";
+var current_version = "7659efa34712b560a174dd090e605c1c";
 // 版本号的加盐的MD5，记得改
 
 export default {
