@@ -139,7 +139,7 @@ export default {
   mounted: async function () {
     storeSaver.loadState(this);
     await zutils.fetchAllVolunter((volworks) => { this.vol = volworks; });
-    setInterval(this.listen, 30000, this);
+    setInterval(this.listen, 300000, this);
     // console.log("mounted");
   },
   methods: {
