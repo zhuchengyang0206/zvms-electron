@@ -44,10 +44,12 @@
 </template>
 
 <script>
+import zutils from "../utils/zutils.js"
 import dialogs from "../utils/dialogs.js"; //弹出toast提示用
 import { NOTEMPTY } from "../utils/validation.js"; //校验表单完整性
 import axios from "axios"; //ajax网络库
 import permissions from "../utils/permissions.js";
+import storeSaver from "../utils/storeSaver.js";
 
 let { ipcRenderer } = window.require('electron')
 
@@ -67,6 +69,12 @@ export default {
     rules: [NOTEMPTY()], //表单校验规则
     winheight: document.documentElement.clientHeight - 100, //一个比较失败的自动调整大小
   }),
+  mounted: async function () {
+    await storeSaver.loadState(this, (t) => {
+      t.$router.push("/me");
+      zutils.checkToken(this);
+    });
+  },
   methods: {
     login() {
       if (this.$refs.form.validate()) {

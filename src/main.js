@@ -37,6 +37,10 @@ router.beforeEach((to, from, next) => {
 	NProgress.start();
 	if (to.path == '/report') next();
 	else if (to.path != '/login') {
+		console.log(233);
+		console.log(to,from,next);
+        console.log(store.state.token);
+		console.log(233);
 		if (store.state.token) {
 			next();
 		} else {

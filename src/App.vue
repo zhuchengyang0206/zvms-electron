@@ -137,9 +137,11 @@ export default {
     currentVol: undefined
   }),
   mounted: async function () {
-    storeSaver.loadState(this);
+    // storeSaver.loadState(this);
+    // this.$router.push("/me");
+    // await zutils.checkToken(this);
     await zutils.fetchAllVolunter((volworks) => { this.vol = volworks; });
-    setInterval(this.listen, 300000, this);
+    setInterval(this.listen, 60000, this);
     // console.log("mounted");
   },
   methods: {

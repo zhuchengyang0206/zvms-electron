@@ -7,6 +7,7 @@ export default {
     checkToken: async (con) => {
         await Axios
             .post("/user/info").then((msg) => {
+              console.log(con.$store);
               if (msg["data"]["type"] != "SUCCESS") {
                 Axios.post("/user/logout").finally(() => {
                   con.$store.commit("draweritems", [
