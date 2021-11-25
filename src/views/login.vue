@@ -54,7 +54,7 @@ import storeSaver from "../utils/storeSaver.js";
 let { ipcRenderer } = window.require('electron')
 
 var md5=require('md5-node');
-var current_version = "ae8e177f096c97444b63ecf328f0e058";
+var current_version = "cb6a4549b3e44a70ee46319a049eb2b5";
 // 版本号的加盐的MD5，记得改
 
 export default {
