@@ -125,6 +125,7 @@
 import zutils from "./utils/zutils.js"
 import dialogs from "./utils/dialogs.js";
 import permissions from "./utils/permissions.js";
+import storeSaver from "./utils/storeSaver.js";
 
 let { ipcRenderer } = window.require('electron')
 export default {
@@ -136,9 +137,12 @@ export default {
     currentVol: undefined
   }),
   mounted: async function () {
+    // storeSaver.loadState(this);
+    // this.$router.push("/me");
+    // await zutils.checkToken(this);
     await zutils.fetchAllVolunter((volworks) => { this.vol = volworks; });
-    setInterval(this.listen, 300000, this);
-      console.log("mounted");
+    setInterval(this.listen, 60000, this);
+    // console.log("mounted");
   },
   methods: {
     granted: function () {
@@ -174,16 +178,21 @@ export default {
     },
     async listen(t) {
       console.log("listen");
-      if (!t.$store.isLogined){
+      if (!t.$store.state.isLogined){
+        console.log(t.$store.state);
+        console.error("!login");
         ipcRenderer.send('flash');
         return;
       }
+      storeSaver.saveState(this);
       zutils.checkToken(t);
-      await zutils.fetchVol();
+      t.fetchVol();
       let flag = false;
-      let last = t.$store.lastSeenVol;
+      let last = t.$store.state.lastSeenVol;
       let vol = t.currentVol;
-      if (last && vol) {
+      // console.log(last,vol);
+      if (last!=null && last!=undefined && vol!=null && vol!=undefined) {
+        // console.log(last,vol);
         if (vol.length != last.length) flag = true;
         else {
           for (var i = 0; i < vol.length; i++)

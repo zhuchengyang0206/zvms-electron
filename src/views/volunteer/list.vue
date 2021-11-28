@@ -166,8 +166,10 @@ export default {
     async pageload() {
       await zutils.checkToken(this);
       ipcRenderer.send('endflash');
-      await this.fetchVol();
-      this.$store.lastSeenVol = this.volworks;
+      this.fetchVol((volworks) => {
+          this.volworks = volworks;
+          this.$store.commit("lastSeenVol", this.volworks);
+      });
     },
     granted: function () {
       return this.$store.state.info.permission < permissions.teacher;
@@ -242,28 +244,28 @@ export default {
       this.volid = volid;
       this.dialog = true;
     },
-    fetchVol: function () {
-       if (this.granted()) this.fetchCurrentClassVol();
-       else this.fetchAllVol();
+    fetchVol: function (f) {
+       if (this.granted()) this.fetchCurrentClassVol(f);
+       else this.fetchAllVol(f);
     },
-    async fetchCurrentClassVol() {
+    async fetchCurrentClassVol(f) {
       this.$store.commit("loading", true);
       await zutils.fetchClassVolunter(
         this.$store.state.info.class,
         (volworks) => {
           volworks
-            ? (this.volworks = volworks)
+            ? f(volworks)
             : dialogs.toasts.error("获取义工列表失败");
         }
       );
       this.$store.commit("loading", false);
     },
     
-    async fetchAllVol() {
+    async fetchAllVol(f) {
       this.$store.commit("loading", true);
       await zutils.fetchAllVolunter((volworks) => {
         volworks
-          ? (this.volworks = volworks)
+          ? f(volworks)
           : dialogs.toasts.error("获取义工列表失败");
       });
       this.$store.commit("loading", false);

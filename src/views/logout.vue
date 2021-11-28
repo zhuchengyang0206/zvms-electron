@@ -7,6 +7,7 @@
 <script>
 import axios from "axios";
 import dialogs from "../utils/dialogs.js";
+import storeSaver from "../utils/storeSaver.js";
 
 export default {
   name: "logout",
@@ -43,6 +44,9 @@ export default {
           ]);
           this.$router.push("/login");
           this.$store.commit("loading", false);
+          this.$store.commit("login", false);
+          this.$store.commit("lastSeenVol", []);
+          storeSaver.saveState(this);
         });
     },
   },

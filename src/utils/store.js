@@ -39,6 +39,9 @@ export default new Vuex.Store({
         },
         token: (state, payload) => {
             state.token = payload
+        },
+        lastSeenVol: (state, payload) => {
+            state.lastSeenVol = payload
         }
     },
     plugins: [createPersistedState()]

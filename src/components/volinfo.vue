@@ -73,14 +73,17 @@ export default {
     this.init();
   },
   methods: {
-	timeToHint: function (a){
-		let hr = parseInt(a / 60);
-		let mi = a % 60;
-		if (hr != 0)
-			return hr + " 小时 " + mi + " 分钟";
-		else
-			return mi + "分钟";
-	},
+    timeToHint: function (a){
+        let hr = parseInt(a / 60);
+        let mi = parseInt(a % 60);
+        if (hr != 0)
+            if (mi != 0)
+                return hr + " 小时 " + mi + " 分钟";
+            else
+                return hr + " 小时 ";
+        else
+            return mi + "分钟";
+    },
     init: function () {
       if (this.volid != 0 && this.volid != undefined) {
         this.$store.commit("loading", true);
