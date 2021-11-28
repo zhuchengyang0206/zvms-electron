@@ -8,13 +8,15 @@
 </template>
 
 <script>
+import zutils from "../utils/zutils.js";
 export default {
   name: "home",
   mounted: function () {
     this.pageload();
   },
   methods: {
-    pageload: function(){
+    pageload: async function(){
+      await zutils.checkToken(this.$store);
       this.$router.push("/me");
     }
   },

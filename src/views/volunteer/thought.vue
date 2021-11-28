@@ -48,16 +48,16 @@
               <td>{{volDesc}}</td>
             </tr>
             <tr>
-              <td>校内时长（分钟）</td>
-              <td>{{volTI}}</td>
+              <td>校内时长</td>
+              <td>{{timeToHint(volTI)}}</td>
             </tr>
             <tr>
-              <td>校外时长（分钟）</td>
-              <td>{{volTO}}</td>
+              <td>校外时长</td>
+              <td>{{timeToHint(volTO)}}</td>
             </tr>
             <tr>
-              <td>大型时长（分钟）</td>
-              <td>{{volTL}}</td>
+              <td>大型时长</td>
+              <td>{{timeToHint(volTL)}}</td>
             </tr>
             <tr>
               <td>学号</td>
@@ -93,8 +93,6 @@ import permissions from "../../utils/permissions";
 import axios from "axios";
 import zutils from "../../utils/zutils";
 
-let { ipcRenderer } = window.require('electron');
-
 export default {
   data: () => ({
     search: "",
@@ -118,20 +116,20 @@ export default {
     this.pageload();
   },
   methods: {
+    timeToHint: function (a){
+        let hr = parseInt(a / 60);
+        let mi = parseInt(a % 60);
+        if (hr != 0)
+            if (mi != 0)
+                return hr + " 小时 " + mi + " 分钟";
+            else
+                return hr + " 小时 ";
+        else
+            return mi + "分钟";
+    },
     async pageload() {
-	  await zutils.checkToken((flag)=>{
-	    if(!flag){
-		  axios.post("/user/logout").finally({
-		    this.$store.commit("draweritems", [
-              { title: "登录", to: "/login", icon: "mdi-account-circle" },
-            ]);
-            this.$router.push("/login");
-            ipcRenderer.send('flash');
-            this.$store.commit("loading", false);
-		  })
-		}
-	  });
       this.$store.commit("loading", true);
+      await zutils.checkToken(this);
       await axios
         .get("/class/noThought/"+this.$store.state.info.class,{
 

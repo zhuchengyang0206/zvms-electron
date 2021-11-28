@@ -16,6 +16,7 @@ export default new Vuex.Store({
             class: undefined,
             classname: undefined
         },
+        lastSeenVol: undefined,
         draweritems: [
             { title: '登录', to: '/login', icon: 'mdi-account-circle' },
             { title: "反馈错误", to: "/report", icon: "mdi-alert" }
@@ -38,6 +39,9 @@ export default new Vuex.Store({
         },
         token: (state, payload) => {
             state.token = payload
+        },
+        lastSeenVol: (state, payload) => {
+            state.lastSeenVol = payload
         }
     },
     plugins: [createPersistedState()]

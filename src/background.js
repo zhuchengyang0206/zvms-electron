@@ -10,6 +10,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 const electron = require('electron')
 const Menu = electron.Menu
 const Tray = electron.Tray
+const fs = require('fs')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -105,6 +106,7 @@ function createWindow() {
     })
     let timericon;
     ipcMain.on('flash', () => {
+        if (timericon) return;
         win.flashFrame(true);
         let type = 0;
         timericon = setInterval(() => {
@@ -115,8 +117,20 @@ function createWindow() {
         );
     })
     ipcMain.on('endflash', () => {
+        if (!timericon) return;
         clearInterval(timericon);
+        timericon = undefined;
         tray.setImage(path.join(__static,'logo.ico'));
+    })
+    ipcMain.on('file-read-req', (event, arg) => {
+        fs.readFile(arg, 'utf-8', (err, data) => {
+            event.sender.send('file-read-complete', {"err": err, "data": data})
+        })
+    })
+    ipcMain.on('file-write-req', (event, arg) => {
+        fs.writeFile(arg.path, arg.data, (err) => {
+            event.sender.send('file-write-complete', {"err": err})
+        })
     })
 }
 

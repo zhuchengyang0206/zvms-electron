@@ -52,7 +52,7 @@
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>义工管理系统</v-list-item-title>
-            <v-list-item-subtitle>内测</v-list-item-subtitle>
+            <v-list-item-subtitle>v1.2.2</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
@@ -102,7 +102,7 @@
       color="rgba(255,255,255,0.3)"
     >
       <v-col class="text-center" cols="12"
-        >{{ new Date().getFullYear() }} - © mo_yi &amp; Zecyel &amp; fpc7519</v-col
+        >{{ new Date().getFullYear() }} - © mo_yi &amp; Zecyel &amp; fpc5719</v-col
       >
     </v-footer>
   </v-app>
@@ -123,6 +123,9 @@
 </style>
 <script>
 import zutils from "./utils/zutils.js"
+import dialogs from "./utils/dialogs.js";
+import permissions from "./utils/permissions.js";
+import storeSaver from "./utils/storeSaver.js";
 
 let { ipcRenderer } = window.require('electron')
 export default {
@@ -131,31 +134,73 @@ export default {
     activeBtn: 1,
     drawer: true,
     phone: false,
+    currentVol: undefined
   }),
   mounted: async function () {
-    let vol;
-    await zutils.fetchAllVolunter((volworks) => { vol = volworks; });
-    this.listen(vol)
+    // storeSaver.loadState(this);
+    // this.$router.push("/me");
+    // await zutils.checkToken(this);
+    await zutils.fetchAllVolunter((volworks) => { this.vol = volworks; });
+    setInterval(this.listen, 60000, this);
+    // console.log("mounted");
   },
   methods: {
+    granted: function () {
+      return this.$store.state.info.permission < permissions.teacher;
+    },
     changeColorTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
-    async listen(last) {
-      let vol;
-      await zutils.fetchAllVolunter((volworks) => { vol = volworks; });
+    fetchVol: function () {
+       if (this.granted()) this.fetchCurrentClassVol();
+       else this.fetchAllVol();
+    },
+    async fetchCurrentClassVol() {
+      this.$store.commit("loading", true);
+      await zutils.fetchClassVolunter(
+        this.$store.state.info.class,
+        (volworks) => {
+          volworks
+            ? (this.currentVol = volworks)
+            : dialogs.toasts.error("获取义工列表失败");
+        }
+      );
+      this.$store.commit("loading", false);
+    },
+    async fetchAllVol() {
+      this.$store.commit("loading", true);
+      await zutils.fetchAllVolunter((volworks) => {
+        volworks
+          ? (this.currentVol = volworks)
+          : dialogs.toasts.error("获取义工列表失败");
+      });
+      this.$store.commit("loading", false);
+    },
+    async listen(t) {
+      console.log("listen");
+      if (!t.$store.state.isLogined){
+        console.log(t.$store.state);
+        console.error("!login");
+        ipcRenderer.send('flash');
+        return;
+      }
+      storeSaver.saveState(this);
+      zutils.checkToken(t);
+      t.fetchVol();
       let flag = false;
-      if (last) {
+      let last = t.$store.state.lastSeenVol;
+      let vol = t.currentVol;
+      // console.log(last,vol);
+      if (last!=null && last!=undefined && vol!=null && vol!=undefined) {
+        // console.log(last,vol);
         if (vol.length != last.length) flag = true;
         else {
           for (var i = 0; i < vol.length; i++)
-            for (var obj in vol[i])
-              if (vol[i][obj] != last[i][obj])
-                flag = true;
+            if (vol[i]["id"] != last[i]["id"])
+              flag = true;
         }
         if (flag) ipcRenderer.send('flash');
       }
-      setInterval(this.listen, 300000, vol);
     },
     minwindow() {
       ipcRenderer.send('minwindow')

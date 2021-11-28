@@ -192,8 +192,6 @@ import zutils from "../../utils/zutils";
 import axios from "axios";
 import { NOTEMPTY } from "../..//utils/validation.js";
 
-let { ipcRenderer } = window.require('electron')
-
 export default {
   data: () => ({
     classSelected: [],
@@ -222,18 +220,8 @@ export default {
   },
   methods: {
     async pageload() {
-	  await zutils.checkToken((flag)=>{
-	    if(!flag){
-		  axios.post("/user/logout").finally({
-		    this.$store.commit("draweritems", [
-              { title: "登录", to: "/login", icon: "mdi-account-circle" },
-            ]);
-            this.$router.push("/login");
-            ipcRenderer.send("flash");
-            this.$store.commit("loading", false);
-		  })
-		}
-	  });
+      this.$store.commit("loading", true);
+      await zutils.checkToken(this);
       await zutils.fetchClassList((classes) => {
         classes
           ? (this.classes = classes)
@@ -248,10 +236,11 @@ export default {
       // if (true){
         console.log("创建义工");
         console.log(this.form);
-        if (this.form.stuMax != parseInt(this.form.stuMax) || isNaN(parseInt(this.form.stuMax)) || parseInt(this.form.stuMax) <= 0 ||
-            this.form.inside != parseInt(this.form.inside) || isNaN(parseInt(this.form.inside)) || parseInt(this.form.inside) <= 0 ||
-            this.form.outside != parseInt(this.form.outside) || isNaN(parseInt(this.form.outside)) || parseInt(this.form.outside) <= 0 ||
-            this.form.large != parseInt(this.form.large) || isNaN(parseInt(this.form.large)) || parseInt(this.form.large) <= 0) {
+        if ((this.form.stuMax != parseInt(this.form.stuMax) || isNaN(parseInt(this.form.stuMax)) || parseInt(this.form.stuMax) <= 0 ||
+            this.form.inside != parseInt(this.form.inside) || isNaN(parseInt(this.form.inside)) || parseInt(this.form.inside) < 0 ||
+            this.form.outside != parseInt(this.form.outside) || isNaN(parseInt(this.form.outside)) || parseInt(this.form.outside) < 0 ||
+            this.form.large != parseInt(this.form.large) || isNaN(parseInt(this.form.large)) || parseInt(this.form.large) < 0) ||
+             (parseInt(this.form.large) == 0 && parseInt(this.form.outside) == 0 && parseInt(this.form.inside) == 0)) {
                 dialogs.toasts.error("数据不合法");
                 return;
             }
